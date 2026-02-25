@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Primer Sueldo - Educación Financiera</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+body{font-family:'Montserrat',sans-serif;}
+.fade-in{animation:fade 0.6s ease-in-out;}
+@keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 min-h-screen text-white">
+
+<div class="max-w-5xl mx-auto p-6">
+
+<!-- Portada -->
+<div class="text-center fade-in">
+<h1 class="text-5xl font-extrabold mb-4">💼 Mi Primer Sueldo</h1>
+<p class="text-xl mb-6">¿El dinero alcanza para todo?</p>
+<img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f" 
+class="rounded-3xl shadow-2xl mx-auto w-full max-h-72 object-cover">
+</div>
+
+<!-- Información del sueldo -->
+<div class="mt-10 bg-white text-gray-800 p-6 rounded-3xl shadow-2xl fade-in">
+<h2 class="text-3xl font-bold mb-4 text-center">Tu salario mensual</h2>
+<p class="text-center text-lg mb-6">Acabas de conseguir tu primer trabajo 🎉</p>
+<div class="text-center text-4xl font-extrabold text-green-600">$12,000 pesos</div>
+</div>
+
+<!-- Gastos fijos -->
+<div class="mt-10 fade-in">
+<h2 class="text-3xl font-bold mb-6 text-center">Gastos Obligatorios</h2>
+
+<div class="grid md:grid-cols-2 gap-6">
+
+<div class="bg-white text-gray-800 p-5 rounded-3xl shadow-xl">
+<img src="https://images.unsplash.com/photo-1560185007-c5ca9d2c014d" class="rounded-xl mb-3 h-40 w-full object-cover">
+<h3 class="font-bold text-lg">🏠 Renta</h3>
+<p>$4,000</p>
+</div>
+
+<div class="bg-white text-gray-800 p-5 rounded-3xl shadow-xl">
+<img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836" class="rounded-xl mb-3 h-40 w-full object-cover">
+<h3 class="font-bold text-lg">🍎 Comida</h3>
+<p>$2,500</p>
+</div>
+
+<div class="bg-white text-gray-800 p-5 rounded-3xl shadow-xl">
+<img src="https://images.unsplash.com/photo-1502920917128-1aa500764ce7" class="rounded-xl mb-3 h-40 w-full object-cover">
+<h3 class="font-bold text-lg">🚌 Transporte</h3>
+<p>$1,000</p>
+</div>
+
+<div class="bg-white text-gray-800 p-5 rounded-3xl shadow-xl">
+<img src="https://images.unsplash.com/photo-1556742031-c6961e8560b0" class="rounded-xl mb-3 h-40 w-full object-cover">
+<h3 class="font-bold text-lg">💡 Servicios</h3>
+<p>$800</p>
+</div>
+
+</div>
+
+<div class="text-center mt-6 text-2xl font-bold">
+Total gastos: $8,300
+</div>
+</div>
+
+<!-- Decisiones -->
+<div class="mt-12 fade-in">
+<h2 class="text-3xl font-bold mb-6 text-center">Te quedan $3,700</h2>
+<p class="text-center mb-6">¿En qué lo gastarás?</p>
+
+<div class="grid md:grid-cols-2 gap-6">
+
+<button onclick="restar(3500)" class="bg-white text-gray-800 p-5 rounded-3xl shadow-xl hover:scale-105 transition">
+📱 Celular nuevo - $3,500
+</button>
+
+<button onclick="restar(1200)" class="bg-white text-gray-800 p-5 rounded-3xl shadow-xl hover:scale-105 transition">
+👟 Ropa - $1,200
+</button>
+
+<button onclick="restar(1000)" class="bg-white text-gray-800 p-5 rounded-3xl shadow-xl hover:scale-105 transition">
+🎮 Videojuego - $1,000
+</button>
+
+<button onclick="restar(2000)" class="bg-white text-gray-800 p-5 rounded-3xl shadow-xl hover:scale-105 transition">
+📚 Curso - $2,000
+</button>
+
+<button onclick="ahorrar()" class="bg-green-500 text-white p-5 rounded-3xl shadow-xl hover:scale-105 transition col-span-2">
+💰 Ahorrar dinero
+</button>
+
+</div>
+
+<div class="mt-6 text-center text-2xl font-bold">
+Dinero restante: $<span id="dinero">3700</span>
+</div>
+</div>
+
+<!-- Reflexión -->
+<div class="mt-12 bg-white text-gray-800 p-8 rounded-3xl shadow-2xl fade-in">
+<h2 class="text-3xl font-bold mb-4 text-center">Reflexiona 🤔</h2>
+<ul class="list-disc pl-6 text-lg space-y-2">
+<li>¿Te alcanzó el dinero?</li>
+<li>¿Ahorraste algo?</li>
+<li>¿Qué harías si surge una emergencia?</li>
+<li>¿Cambiarías alguna decisión?</li>
+</ul>
+</div>
+
+</div>
+
+<script>
+let dinero = 3700;
+
+function restar(cantidad){
+if(dinero - cantidad >= 0){
+dinero -= cantidad;
+document.getElementById("dinero").textContent = dinero;
+}else{
+alert("⚠️ No tienes suficiente dinero para eso.");
+}
+}
+
+function ahorrar(){
+alert("👏 Excelente decisión. Ahorrar te ayuda a prepararte para emergencias.");
+}
+</script>
+
+</body>
+</html>
