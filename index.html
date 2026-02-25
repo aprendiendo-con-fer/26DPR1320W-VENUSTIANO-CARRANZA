@@ -142,20 +142,38 @@
             document.getElementById('view-phases').classList.remove('hidden'); 
         }
 
-        function cargarJuegos(f) {
-            document.getElementById('view-phases').classList.add('hidden');
-            document.getElementById('view-game-list').classList.remove('hidden');
-            const grid = document.getElementById('game-grid');
-            grid.innerHTML = "";
-            for(let i=1; i<=10; i++) {
-                grid.innerHTML += `
-                <div class="glass p-8 rounded-[3rem] text-center border-b-8 border-gray-200 animate__animated animate__fadeInUp">
-                    <div class="text-5xl mb-4">🎮</div>
-                    <h4 class="font-kids text-xl uppercase italic">Juego ${i}</h4>
-                    <p class="text-xs font-bold text-gray-400">FASE ${f}</p>
-                    <a href="f${f}_j${i}.html" class="inline-block bg-pink-500 text-white px-10 py-2 rounded-full font-kids mt-4 shadow-lg hover:bg-pink-600 transition-all">JUGAR</a>
-                </div>`;
-            }
+function cargarJuegos(f) {
+    document.getElementById('view-phases').classList.add('hidden');
+    document.getElementById('view-game-list').classList.remove('hidden');
+    const grid = document.getElementById('game-grid');
+    grid.innerHTML = "";
+
+    // 1. AQUÍ ESCRIBES TUS JUEGOS
+    const misJuegos = {
+        3: [
+            { nombre: "Aprende las Vocales", link: "f3_vocales.html", icono: "🔤" },
+            { nombre: "Sumas Divertidas", link: "f3_sumas.html", icono: "➕" }
+        ],
+        4: [
+            { nombre: "Las Tablas", link: "f4_tablas.html", icono: "✖️" },
+            { nombre: "Naturaleza", link: "f4_ciencias.html", icono: "🌿" }
+        ],
+        5: [
+            { nombre: "Cuerpo Humano", link: "f5_cuerpo.html", icono: "🧠" },
+            { nombre: "Universo", link: "f5_planetas.html", icono: "🚀" }
+        ]
+    };
+
+    // 2. ESTO CREA LOS BOTONES AUTOMÁTICAMENTE
+    misJuegos[f].forEach(juego => {
+        grid.innerHTML += `
+        <div class="glass p-8 rounded-[3rem] text-center border-b-8 border-gray-200 animate__animated animate__fadeInUp">
+            <div class="text-5xl mb-4">${juego.icono}</div>
+            <h4 class="font-kids text-xl uppercase italic">${juego.nombre}</h4>
+            <p class="text-xs font-bold text-gray-400">FASE ${f}</p>
+            <a href="${juego.link}" class="inline-block bg-pink-500 text-white px-10 py-2 rounded-full font-kids mt-4 shadow-lg hover:bg-pink-600 transition-all">JUGAR</a>
+        </div>`;
+    });
         }
     </script>
 </body>
