@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matemáticas Mágicas Montessori</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Nunito', sans-serif; }
+    .title-font { font-family: 'Fredoka One', cursive; }
+    
+    .text-outline {
+      color: white;
+      text-shadow: 
+        -2px -2px 0 #1e3a5f,
+        2px -2px 0 #1e3a5f,
+        -2px 2px 0 #1e3a5f,
+        2px 2px 0 #1e3a5f,
+        0 3px 6px rgba(0,0,0,0.3);
+    }
+    
+    .math-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .math-bg::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: 
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='10' y='30' font-size='20' fill='rgba(255,255,255,0.1)'%3E÷%3C/text%3E%3Ctext x='60' y='50' font-size='25' fill='rgba(255,255,255,0.08)'%3E×%3C/text%3E%3Ctext x='30' y='80' font-size='18' fill='rgba(255,255,255,0.1)'%3E+%3C/text%3E%3Ctext x='75' y='20' font-size='22' fill='rgba(255,255,255,0.08)'%3E=%3C/text%3E%3Ctext x='5' y='60' font-size='16' fill='rgba(255,255,255,0.1)'%3E−%3C/text%3E%3C/svg%3E");
+      background-size: 150px 150px;
+      animation: float 20s linear infinite;
+      pointer-events: none;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); }
+      100% { transform: translateY(-150px) translateX(150px); }
+    }
+    
+    .unit-block {
+      width: 28px; height: 28px;
+      background: linear-gradient(145deg, #60a5fa, #2563eb);
+      border: 2px solid #1d4ed8;
+      border-radius: 4px;
+      box-shadow: 2px 2px 4px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .ten-block {
+      width: 28px; height: 280px;
+      background: linear-gradient(145deg, #f87171, #dc2626);
+      border: 2px solid #b91c1c;
+      border-radius: 4px;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.3), inset 1px 1px 3px rgba(255,255,255,0.3);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .ten-block .section {
+      flex: 1;
+      border-bottom: 1px solid rgba(0,0,0,0.2);
+    }
+    
+    .ten-block .section:last-child { border-bottom: none; }
+    
+    .hundred-block {
+      width: 280px; height: 280px;
+      background: linear-gradient(145deg, #fbbf24, #d97706);
+      border: 3px solid #b45309;
+      border-radius: 6px;
+      box-shadow: 3px 3px 8px rgba(0,0,0,0.3), inset 2px 2px 4px rgba(255,255,255,0.3);
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+      gap: 1px;
+    }
+    
+    .hundred-block .cell {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .thousand-block {
+      width: 100px; height: 100px;
+      background: linear-gradient(145deg, #4ade80, #16a34a);
+      border: 3px solid #15803d;
+      border-radius: 8px;
+      box-shadow: 4px 4px 10px rgba(0,0,0,0.3), inset 2px 2px 5px rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      font-size: 1.5rem;
+    }
+    
+    .btn-game {
+      background: linear-gradient(145deg, #8b5cf6, #6d28d9);
+      border: 3px solid #5b21b6;
+      border-radius: 16px;
+      padding: 12px 24px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.2);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .btn-game:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 10px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.2);
+    }
+    
+    .btn-game:active {
+      transform: translateY(1px);
+    }
+    
+    .btn-level {
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      border: 3px solid;
+    }
+    
+    .btn-easy {
+      background: linear-gradient(145deg, #4ade80, #22c55e);
+      border-color: #16a34a;
+      color: white;
+    }
+    
+    .btn-medium {
+      background: linear-gradient(145deg, #fbbf24, #f59e0b);
+      border-color: #d97706;
+      color: white;
+    }
+    
+    .btn-hard {
+      background: linear-gradient(145deg, #f87171, #ef4444);
+      border-color: #dc2626;
+      color: white;
+    }
+    
+    .number-btn {
+      min-width: 50px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      border: 2px solid;
+    }
+    
+    .number-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    .operator-btn {
+      width: 45px; height: 45px;
+      border-radius: 50%;
+      font-weight: 800;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      border: 3px solid;
+    }
+    
+    .merging {
+      animation: merge 0.5s ease-in-out;
+    }
+    
+    @keyframes merge {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    .celebration {
+      animation: celebrate 0.6s ease-in-out;
+    }
+    
+    @keyframes celebrate {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.1) rotate(-5deg); }
+      75% { transform: scale(1.1) rotate(5deg); }
+    }
+    
+    .workspace-area {
+      min-height: 200px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px;
+      border: 4px dashed #a78bfa;
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 24px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80%;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    .stars {
+      position: absolute;
+      pointer-events: none;
+    }
+    
+    .star {
+      position: absolute;
+      font-size: 2rem;
+      animation: starBurst 1s ease-out forwards;
+    }
+    
+    @keyframes starBurst {
+      0% { transform: scale(0) rotate(0deg); opacity: 1; }
+      100% { transform: scale(1.5) rotate(360deg); opacity: 0; }
+    }
+
+    .block-mini {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.7rem;
+      color: white;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+    }
+    
+    .block-unit-mini {
+      width: 18px; height: 18px;
+      background: linear-gradient(145deg, #60a5fa, #2563eb);
+      border: 1px solid #1d4ed8;
+    }
+    
+    .block-ten-mini {
+      width: 18px; height: 60px;
+      background: linear-gradient(145deg, #f87171, #dc2626);
+      border: 1px solid #b91c1c;
+      writing-mode: vertical-rl;
+    }
+    
+    .block-hundred-mini {
+      width: 50px; height: 50px;
+      background: linear-gradient(145deg, #fbbf24, #d97706);
+      border: 2px solid #b45309;
+    }
+    
+    .block-thousand-mini {
+      width: 60px; height: 60px;
+      background: linear-gradient(145deg, #4ade80, #16a34a);
+      border: 2px solid #15803d;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full math-bg overflow-auto">
+  <div id="app" class="min-h-full p-4 relative z-10"><!-- Pantalla de Términos y Condiciones -->
+   <div id="terms-screen" class="min-h-full flex items-center justify-content-center">
+    <div class="modal-content mx-auto my-8">
+     <div class="text-center mb-6">
+      <h1 class="title-font text-3xl text-purple-600 mb-2">🎮 Matemáticas Mágicas 🎮</h1>
+      <p class="text-gray-600 font-semibold">Juego Educativo Montessori</p>
+     </div>
+     <div class="bg-purple-50 rounded-xl p-4 mb-4">
+      <h2 class="font-bold text-purple-700 mb-3 text-lg">📜 Términos y Condiciones de Uso</h2>
+      <div class="text-sm text-gray-700 space-y-2 max-h-48 overflow-y-auto">
+       <p><strong>1. Licencia de Uso:</strong> Este juego educativo es para uso personal y educativo únicamente. La persona que adquiere este material puede utilizarlo con sus estudiantes en su práctica docente.</p>
+       <p><strong>2. Prohibiciones:</strong> Queda estrictamente prohibido: <br>
+        • Revender, redistribuir o compartir este material <br>
+        • Modificar, copiar o reproducir el contenido <br>
+        • Eliminar o alterar los créditos de autoría <br>
+        • Usar el material para fines comerciales no autorizados</p>
+       <p><strong>3. Propiedad Intelectual:</strong> Todos los derechos de autor pertenecen a la creadora. El uso indebido del material puede resultar en acciones legales.</p>
+       <p><strong>4. Uso Educativo:</strong> Este material está diseñado exclusivamente para fines educativos y el apoyo al aprendizaje de matemáticas en nivel primaria.</p>
+      </div>
+     </div>
+     <div class="bg-pink-100 rounded-xl p-4 mb-4 text-center">
+      <p class="text-pink-700 font-bold">💝 Creado con amor por</p>
+      <p class="title-font text-xl text-pink-600">Maestra María Fernanda Flores Valenzuela</p>
+     </div>
+     <div class="flex items-center gap-3 mb-4"><input type="checkbox" id="accept-terms" class="w-5 h-5 accent-purple-600"> <label for="accept-terms" class="text-sm font-semibold text-gray-700"> He leído y acepto los términos y condiciones de uso </label>
+     </div><button id="start-btn" onclick="acceptTerms()" disabled class="w-full btn-game opacity-50 cursor-not-allowed transition-all"> 🚀 ¡Comenzar a Jugar! </button>
+    </div>
+   </div><!-- Pantalla Principal del Juego -->
+   <div id="game-screen" class="hidden"><!-- Header -->
+    <div class="text-center mb-4">
+     <h1 id="main-title" class="title-font text-3xl md:text-4xl text-outline mb-2">🔢 Matemáticas Mágicas 🔢</h1>
+     <p class="text-white font-bold text-shadow">Aprende jugando con las regletas Montessori</p>
+    </div><!-- Selector de Modo -->
+    <div class="flex flex-wrap justify-center gap-3 mb-4"><button onclick="setMode('representar')" class="btn-game text-sm" id="btn-representar"> 🎯 Representar Números </button> <button onclick="setMode('sumar')" class="btn-game text-sm" id="btn-sumar"> ➕ Sumas Mágicas </button> <button onclick="setMode('descomponer')" class="btn-game text-sm" id="btn-descomponer"> 🧩 Descomposición </button>
+    </div><!-- Selector de Nivel -->
+    <div class="flex justify-center gap-3 mb-4" id="level-selector"><button onclick="setLevel('easy')" class="btn-level btn-easy text-sm" id="btn-easy"> 🌟 Fácil </button> <button onclick="setLevel('medium')" class="btn-level btn-medium text-sm" id="btn-medium"> ⭐ Medio </button> <button onclick="setLevel('hard')" class="btn-level btn-hard text-sm" id="btn-hard"> 🌟🌟 Difícil </button>
+    </div><!-- Área del Problema -->
+    <div class="bg-white/95 rounded-2xl p-4 mb-4 shadow-lg">
+     <div class="text-center mb-4">
+      <p class="text-purple-600 font-bold mb-2" id="instruction-text">Selecciona un modo para comenzar</p>
+      <div id="problem-display" class="title-font text-4xl md:text-5xl text-purple-700">
+       ---
+      </div>
+     </div><!-- Leyenda de Colores -->
+     <div class="flex flex-wrap justify-center gap-4 text-xs font-bold mb-4">
+      <div class="flex items-center gap-2">
+       <div class="block-unit-mini block-mini"></div><span class="text-blue-600">Unidad (1)</span>
+      </div>
+      <div class="flex items-center gap-2">
+       <div class="block-ten-mini block-mini" style="height:24px"></div><span class="text-red-600">Decena (10)</span>
+      </div>
+      <div class="flex items-center gap-2">
+       <div class="block-hundred-mini block-mini" style="width:30px;height:30px"></div><span class="text-yellow-600">Centena (100)</span>
+      </div>
+      <div class="flex items-center gap-2">
+       <div class="block-thousand-mini block-mini" style="width:35px;height:35px"></div><span class="text-green-600">Millar (1000)</span>
+      </div>
+     </div>
+    </div><!-- Área de Trabajo -->
+    <div class="bg-white/90 rounded-2xl p-4 mb-4 shadow-lg">
+     <div class="flex justify-between items-center mb-3">
+      <h3 class="font-bold text-purple-700">🎨 Área de Trabajo</h3>
+      <div class="flex gap-2"><span id="current-value" class="bg-purple-100 px-3 py-1 rounded-full font-bold text-purple-700"> Total: 0 </span> <button onclick="clearWorkspace()" class="bg-red-100 hover:bg-red-200 px-3 py-1 rounded-full text-red-600 font-bold text-sm transition-all"> 🗑️ Limpiar </button>
+      </div>
+     </div>
+     <div id="workspace" class="workspace-area">
+      <p class="text-gray-400 font-semibold w-full text-center">Arrastra las regletas aquí o usa los botones de abajo</p>
+     </div>
+    </div><!-- Panel de Control para Representar/Sumar -->
+    <div id="blocks-panel" class="bg-white/90 rounded-2xl p-4 mb-4 shadow-lg hidden">
+     <h3 class="font-bold text-purple-700 mb-3">🧱 Añadir Regletas</h3>
+     <div class="flex flex-wrap gap-2 justify-center"><button onclick="addBlock('unit')" class="number-btn bg-blue-500 border-blue-700 text-white hover:bg-blue-600"> +1 Unidad </button> <button onclick="addBlock('ten')" class="number-btn bg-red-500 border-red-700 text-white hover:bg-red-600"> +10 Decena </button> <button onclick="addBlock('hundred')" class="number-btn bg-yellow-500 border-yellow-700 text-white hover:bg-yellow-600"> +100 Centena </button> <button onclick="addBlock('thousand')" class="number-btn bg-green-500 border-green-700 text-white hover:bg-green-600"> +1000 Millar </button>
+     </div>
+     <div class="flex flex-wrap gap-2 justify-center mt-3"><button onclick="removeBlock('unit')" class="number-btn bg-blue-200 border-blue-400 text-blue-700 hover:bg-blue-300 text-xs"> -1 </button> <button onclick="removeBlock('ten')" class="number-btn bg-red-200 border-red-400 text-red-700 hover:bg-red-300 text-xs"> -10 </button> <button onclick="removeBlock('hundred')" class="number-btn bg-yellow-200 border-yellow-400 text-yellow-700 hover:bg-yellow-300 text-xs"> -100 </button> <button onclick="removeBlock('thousand')" class="number-btn bg-green-200 border-green-400 text-green-700 hover:bg-green-300 text-xs"> -1000 </button>
+     </div>
+    </div><!-- Panel de Descomposición -->
+    <div id="decompose-panel" class="bg-white/90 rounded-2xl p-4 mb-4 shadow-lg hidden">
+     <h3 class="font-bold text-purple-700 mb-3">🔢 Construye tu descomposición</h3>
+     <div id="decompose-answer" class="bg-purple-50 rounded-xl p-3 mb-4 min-h-16 flex flex-wrap items-center gap-2 justify-center"><span class="text-gray-400 font-semibold">Tu respuesta aparecerá aquí</span>
+     </div><!-- Unidades -->
+     <div class="mb-3">
+      <p class="text-blue-600 font-bold text-sm mb-2">🔵 Unidades</p>
+      <div class="flex flex-wrap gap-1"><button onclick="addDecompose(1)" class="number-btn bg-blue-500 border-blue-700 text-white text-xs">1</button> <button onclick="addDecompose(2)" class="number-btn bg-blue-500 border-blue-700 text-white text-xs">2</button> <button onclick="addDecompose(3)" class="number-btn bg-blue-500 border-blue-700 text-white text-xs">3</button> <button onclick="addDecompose(4)" class="number-btn bg-blue-500 border-blue-700 text-white text-xs">4</button> <button onclick="addDecompose(5)" class="number-btn bg-blue-500 border-blue-700 text-white text-xs">5</button> <button onclick="addDecompose(6)" class="number-btn bg-blue-500 border-blue-700 text-white text-xs">6</button> <button onclick="addDecompose(7)" class="number-btn bg-blue-500 border-blue-700 text-white text-xs">7</button> <button onclick="addDecompose(8)" class="number-btn bg-blue-500 border-blue-700 text-white text-xs">8</button> <button onclick="addDecompose(9)" class="number-btn bg-blue-500 border-blue-700 text-white text-xs">9</button>
+      </div>
+     </div><!-- Decenas -->
+     <div class="mb-3">
+      <p class="text-red-600 font-bold text-sm mb-2">🔴 Decenas</p>
+      <div class="flex flex-wrap gap-1"><button onclick="addDecompose(10)" class="number-btn bg-red-500 border-red-700 text-white text-xs">10</button> <button onclick="addDecompose(20)" class="number-btn bg-red-500 border-red-700 text-white text-xs">20</button> <button onclick="addDecompose(30)" class="number-btn bg-red-500 border-red-700 text-white text-xs">30</button> <button onclick="addDecompose(40)" class="number-btn bg-red-500 border-red-700 text-white text-xs">40</button> <button onclick="addDecompose(50)" class="number-btn bg-red-500 border-red-700 text-white text-xs">50</button> <button onclick="addDecompose(60)" class="number-btn bg-red-500 border-red-700 text-white text-xs">60</button> <button onclick="addDecompose(70)" class="number-btn bg-red-500 border-red-700 text-white text-xs">70</button> <button onclick="addDecompose(80)" class="number-btn bg-red-500 border-red-700 text-white text-xs">80</button> <button onclick="addDecompose(90)" class="number-btn bg-red-500 border-red-700 text-white text-xs">90</button>
+      </div>
+     </div><!-- Centenas -->
+     <div class="mb-3">
+      <p class="text-yellow-600 font-bold text-sm mb-2">🟡 Centenas</p>
+      <div class="flex flex-wrap gap-1"><button onclick="addDecompose(100)" class="number-btn bg-yellow-500 border-yellow-700 text-white text-xs">100</button> <button onclick="addDecompose(200)" class="number-btn bg-yellow-500 border-yellow-700 text-white text-xs">200</button> <button onclick="addDecompose(300)" class="number-btn bg-yellow-500 border-yellow-700 text-white text-xs">300</button> <button onclick="addDecompose(400)" class="number-btn bg-yellow-500 border-yellow-700 text-white text-xs">400</button> <button onclick="addDecompose(500)" class="number-btn bg-yellow-500 border-yellow-700 text-white text-xs">500</button> <button onclick="addDecompose(600)" class="number-btn bg-yellow-500 border-yellow-700 text-white text-xs">600</button> <button onclick="addDecompose(700)" class="number-btn bg-yellow-500 border-yellow-700 text-white text-xs">700</button> <button onclick="addDecompose(800)" class="number-btn bg-yellow-500 border-yellow-700 text-white text-xs">800</button> <button onclick="addDecompose(900)" class="number-btn bg-yellow-500 border-yellow-700 text-white text-xs">900</button>
+      </div>
+     </div><!-- Millares -->
+     <div class="mb-3">
+      <p class="text-green-600 font-bold text-sm mb-2">🟢 Millares</p>
+      <div class="flex flex-wrap gap-1"><button onclick="addDecompose(1000)" class="number-btn bg-green-500 border-green-700 text-white text-xs">1000</button> <button onclick="addDecompose(2000)" class="number-btn bg-green-500 border-green-700 text-white text-xs">2000</button> <button onclick="addDecompose(3000)" class="number-btn bg-green-500 border-green-700 text-white text-xs">3000</button> <button onclick="addDecompose(4000)" class="number-btn bg-green-500 border-green-700 text-white text-xs">4000</button> <button onclick="addDecompose(5000)" class="number-btn bg-green-500 border-green-700 text-white text-xs">5000</button> <button onclick="addDecompose(6000)" class="number-btn bg-green-500 border-green-700 text-white text-xs">6000</button> <button onclick="addDecompose(7000)" class="number-btn bg-green-500 border-green-700 text-white text-xs">7000</button> <button onclick="addDecompose(8000)" class="number-btn bg-green-500 border-green-700 text-white text-xs">8000</button> <button onclick="addDecompose(9000)" class="number-btn bg-green-500 border-green-700 text-white text-xs">9000</button>
+      </div>
+     </div><!-- Operadores -->
+     <div class="mb-3">
+      <p class="text-purple-600 font-bold text-sm mb-2">➕➖ Operadores</p>
+      <div class="flex gap-2 justify-center"><button onclick="addOperator('+')" class="operator-btn bg-purple-500 border-purple-700 text-white hover:bg-purple-600">+</button> <button onclick="addOperator('-')" class="operator-btn bg-pink-500 border-pink-700 text-white hover:bg-pink-600">−</button> <button onclick="clearDecompose()" class="operator-btn bg-gray-400 border-gray-600 text-white hover:bg-gray-500 text-lg">🗑️</button>
+      </div>
+     </div>
+    </div><!-- Botón Verificar -->
+    <div class="text-center mb-4"><button onclick="checkAnswer()" class="btn-game text-lg px-8" id="check-btn"> ✅ ¡Verificar Respuesta! </button> <button onclick="newProblem()" class="btn-game text-lg px-8 ml-2 bg-gradient-to-r from-pink-500 to-orange-400"> 🎲 Nuevo Problema </button>
+    </div><!-- Mensaje de Resultado -->
+    <div id="result-message" class="hidden text-center mb-4">
+     <div class="bg-white/95 rounded-2xl p-4 inline-block shadow-lg">
+      <p id="result-text" class="title-font text-2xl"></p>
+     </div>
+    </div><!-- Puntuación -->
+    <div class="bg-white/90 rounded-2xl p-3 shadow-lg text-center mb-4">
+     <div class="flex justify-center gap-6 flex-wrap">
+      <div class="text-center">
+       <p class="text-green-600 font-bold">✅ Correctas</p>
+       <p id="correct-count" class="title-font text-3xl text-green-500">0</p>
+      </div>
+      <div class="text-center">
+       <p class="text-red-600 font-bold">❌ Intentos</p>
+       <p id="attempts-count" class="title-font text-3xl text-red-500">0</p>
+      </div>
+      <div class="text-center">
+       <p class="text-purple-600 font-bold">⭐ Racha</p>
+       <p id="streak-count" class="title-font text-3xl text-purple-500">0</p>
+      </div>
+     </div>
+    </div><!-- Créditos -->
+    <div class="text-center text-white/80 text-sm font-semibold">
+     <p>💝 Creado con amor por <span class="text-pink-200">Maestra María Fernanda Flores Valenzuela</span> 💝</p>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Estado del juego
+    let gameState = {
+      mode: null, // 'representar', 'sumar', 'descomponer'
+      level: 'easy',
+      currentProblem: null,
+      targetNumber: 0,
+      currentValue: 0,
+      blocks: { units: 0, tens: 0, hundreds: 0, thousands: 0 },
+      decomposition: [],
+      correct: 0,
+      attempts: 0,
+      streak: 0,
+      termsAccepted: false
+    };
+    
+    // Configuración de niveles
+    const levelConfig = {
+      easy: { min: 1, max: 99, sumMax: 50 },
+      medium: { min: 100, max: 999, sumMax: 500 },
+      hard: { min: 1000, max: 9999, sumMax: 5000 }
+    };
+    
+    // Aceptar términos
+    document.getElementById('accept-terms').addEventListener('change', function() {
+      const btn = document.getElementById('start-btn');
+      if (this.checked) {
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    });
+    
+    function acceptTerms() {
+      gameState.termsAccepted = true;
+      document.getElementById('terms-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('hidden');
+    }
+    
+    // Configurar modo de juego
+    function setMode(mode) {
+      gameState.mode = mode;
+      
+      // Actualizar botones activos
+      document.querySelectorAll('[id^="btn-"]').forEach(btn => {
+        if (btn.id.includes(mode)) {
+          btn.classList.add('ring-4', 'ring-white', 'ring-opacity-70');
+        } else if (!['btn-easy', 'btn-medium', 'btn-hard'].includes(btn.id)) {
+          btn.classList.remove('ring-4', 'ring-white', 'ring-opacity-70');
+        }
+      });
+      
+      // Mostrar/ocultar paneles según el modo
+      const blocksPanel = document.getElementById('blocks-panel');
+      const decomposePanel = document.getElementById('decompose-panel');
+      const levelSelector = document.getElementById('level-selector');
+      
+      if (mode === 'descomponer') {
+        blocksPanel.classList.add('hidden');
+        decomposePanel.classList.remove('hidden');
+        levelSelector.classList.remove('hidden');
+      } else {
+        blocksPanel.classList.remove('hidden');
+        decomposePanel.classList.add('hidden');
+        levelSelector.classList.remove('hidden');
+      }
+      
+      // Actualizar instrucciones
+      const instructions = {
+        representar: '🎯 Representa el número usando las regletas de colores',
+        sumar: '➕ Resuelve la suma colocando las regletas correctas',
+        descomponer: '🧩 Descompón el número usando los botones'
+      };
+      document.getElementById('instruction-text').textContent = instructions[mode];
+      
+      newProblem();
+    }
+    
+    // Configurar nivel
+    function setLevel(level) {
+      gameState.level = level;
+      
+      // Actualizar botones de nivel
+      ['easy', 'medium', 'hard'].forEach(l => {
+        const btn = document.getElementById(`btn-${l}`);
+        if (l === level) {
+          btn.classList.add('ring-4', 'ring-white', 'ring-opacity-70');
+        } else {
+          btn.classList.remove('ring-4', 'ring-white', 'ring-opacity-70');
+        }
+      });
+      
+      if (gameState.mode) {
+        newProblem();
+      }
+    }
+    
+    // Generar nuevo problema
+    function newProblem() {
+      if (!gameState.mode) return;
+      
+      const config = levelConfig[gameState.level];
+      clearWorkspace();
+      clearDecompose();
+      hideResult();
+      
+      if (gameState.mode === 'representar') {
+        gameState.targetNumber = randomInt(config.min, config.max);
+        gameState.currentProblem = { type: 'represent', value: gameState.targetNumber };
+        document.getElementById('problem-display').innerHTML = 
+          `<span class="text-purple-700">${gameState.targetNumber}</span>`;
+      } 
+      else if (gameState.mode === 'sumar') {
+        const a = randomInt(Math.floor(config.min/2), Math.floor(config.sumMax/2));
+        const b = randomInt(Math.floor(config.min/2), Math.floor(config.sumMax/2));
+        gameState.targetNumber = a + b;
+        gameState.currentProblem = { type: 'sum', a, b, result: a + b };
+        document.getElementById('problem-display').innerHTML = 
+          `<span class="text-blue-600">${a}</span> <span class="text-purple-500">+</span> <span class="text-pink-600">${b}</span> <span class="text-purple-500">=</span> <span class="text-gray-400">?</span>`;
+      }
+      else if (gameState.mode === 'descomponer') {
+        gameState.targetNumber = randomInt(config.min, config.max);
+        gameState.currentProblem = { type: 'decompose', value: gameState.targetNumber };
+        document.getElementById('problem-display').innerHTML = 
+          `<span class="text-purple-700">${gameState.targetNumber}</span>`;
+      }
+    }
+    
+    // Añadir bloque
+    function addBlock(type) {
+      const values = { unit: 1, ten: 10, hundred: 100, thousand: 1000 };
+      const blockKeys = { unit: 'units', ten: 'tens', hundred: 'hundreds', thousand: 'thousands' };
+      
+      gameState.blocks[blockKeys[type]]++;
+      gameState.currentValue += values[type];
+      
+      updateWorkspace();
+      checkAutoMerge();
+    }
+    
+    // Remover bloque
+    function removeBlock(type) {
+      const values = { unit: 1, ten: 10, hundred: 100, thousand: 1000 };
+      const blockKeys = { unit: 'units', ten: 'tens', hundred: 'hundreds', thousand: 'thousands' };
+      
+      if (gameState.blocks[blockKeys[type]] > 0) {
+        gameState.blocks[blockKeys[type]]--;
+        gameState.currentValue -= values[type];
+        updateWorkspace();
+      }
+    }
+    
+    // Auto-merge: 10 unidades = 1 decena, 10 decenas = 1 centena, etc.
+    function checkAutoMerge() {
+      let merged = false;
+      
+      if (gameState.blocks.units >= 10) {
+        gameState.blocks.units -= 10;
+        gameState.blocks.tens += 1;
+        merged = true;
+        showMergeAnimation('¡10 unidades = 1 decena!', 'blue', 'red');
+      }
+      
+      if (gameState.blocks.tens >= 10) {
+        gameState.blocks.tens -= 10;
+        gameState.blocks.hundreds += 1;
+        merged = true;
+        setTimeout(() => showMergeAnimation('¡10 decenas = 1 centena!', 'red', 'yellow'), 600);
+      }
+      
+      if (gameState.blocks.hundreds >= 10) {
+        gameState.blocks.hundreds -= 10;
+        gameState.blocks.thousands += 1;
+        merged = true;
+        setTimeout(() => showMergeAnimation('¡10 centenas = 1 millar!', 'yellow', 'green'), 1200);
+      }
+      
+      if (merged) {
+        setTimeout(updateWorkspace, 500);
+      }
+    }
+    
+    // Mostrar animación de fusión
+    function showMergeAnimation(text, fromColor, toColor) {
+      const workspace = document.getElementById('workspace');
+      const notification = document.createElement('div');
+      notification.className = 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl p-4 shadow-2xl z-50 merging';
+      notification.innerHTML = `
+        <p class="font-bold text-lg text-center">✨ ${text} ✨</p>
+        <div class="flex justify-center items-center gap-2 mt-2">
+          <div class="w-6 h-6 rounded bg-${fromColor}-500"></div>
+          <span class="text-2xl">➡️</span>
+          <div class="w-6 h-6 rounded bg-${toColor}-500"></div>
+        </div>
+      `;
+      workspace.style.position = 'relative';
+      workspace.appendChild(notification);
+      
+      setTimeout(() => notification.remove(), 1500);
+    }
+    
+    // Actualizar área de trabajo visual
+    function updateWorkspace() {
+      const workspace = document.getElementById('workspace');
+      workspace.innerHTML = '';
+      
+      // Millares (cubos verdes)
+      for (let i = 0; i < gameState.blocks.thousands; i++) {
+        const block = document.createElement('div');
+        block.className = 'thousand-block celebration';
+        block.innerHTML = '1000';
+        workspace.appendChild(block);
+      }
+      
+      // Centenas (cuadrados amarillos con cuadrícula)
+      for (let i = 0; i < gameState.blocks.hundreds; i++) {
+        const block = document.createElement('div');
+        block.className = 'hundred-block';
+        block.style.width = '80px';
+        block.style.height = '80px';
+        for (let j = 0; j < 100; j++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          block.appendChild(cell);
+        }
+        workspace.appendChild(block);
+      }
+      
+      // Decenas (barras rojas divididas)
+      for (let i = 0; i < gameState.blocks.tens; i++) {
+        const block = document.createElement('div');
+        block.className = 'ten-block';
+        block.style.height = '100px';
+        block.style.width = '24px';
+        for (let j = 0; j < 10; j++) {
+          const section = document.createElement('div');
+          section.className = 'section';
+          block.appendChild(section);
+        }
+        workspace.appendChild(block);
+      }
+      
+      // Unidades (cuadrados azules)
+      if (gameState.blocks.units > 0) {
+        const unitsContainer = document.createElement('div');
+        unitsContainer.className = 'flex flex-wrap gap-1 items-end';
+        unitsContainer.style.maxWidth = '150px';
+        
+        for (let i = 0; i < gameState.blocks.units; i++) {
+          const block = document.createElement('div');
+          block.className = 'unit-block';
+          unitsContainer.appendChild(block);
+        }
+        workspace.appendChild(unitsContainer);
+      }
+      
+      if (gameState.currentValue === 0) {
+        workspace.innerHTML = '<p class="text-gray-400 font-semibold w-full text-center">Arrastra las regletas aquí o usa los botones de abajo</p>';
+      }
+      
+      document.getElementById('current-value').textContent = `Total: ${gameState.currentValue}`;
+    }
+    
+    // Limpiar área de trabajo
+    function clearWorkspace() {
+      gameState.blocks = { units: 0, tens: 0, hundreds: 0, thousands: 0 };
+      gameState.currentValue = 0;
+      updateWorkspace();
+    }
+    
+    // Modo descomposición
+    function addDecompose(value) {
+      gameState.decomposition.push({ type: 'number', value });
+      updateDecomposeDisplay();
+    }
+    
+    function addOperator(op) {
+      if (gameState.decomposition.length > 0) {
+        gameState.decomposition.push({ type: 'operator', value: op });
+        updateDecomposeDisplay();
+      }
+    }
+    
+    function clearDecompose() {
+      gameState.decomposition = [];
+      updateDecomposeDisplay();
+    }
+    
+    function updateDecomposeDisplay() {
+      const container = document.getElementById('decompose-answer');
+      
+      if (gameState.decomposition.length === 0) {
+        container.innerHTML = '<span class="text-gray-400 font-semibold">Tu respuesta aparecerá aquí</span>';
+        return;
+      }
+      
+      container.innerHTML = '';
+      
+      gameState.decomposition.forEach((item, index) => {
+        if (item.type === 'number') {
+          const colorClass = getColorClass(item.value);
+          const btn = document.createElement('button');
+          btn.className = `px-3 py-1 rounded-lg font-bold text-white ${colorClass} text-sm`;
+          btn.textContent = item.value;
+          btn.onclick = () => removeDecomposeItem(index);
+          container.appendChild(btn);
+        } else {
+          const op = document.createElement('span');
+          op.className = 'text-2xl font-bold mx-1 text-purple-600';
+          op.textContent = item.value;
+          container.appendChild(op);
+        }
+      });
+      
+      // Mostrar suma automática agrupada
+      showGroupedSum();
+    }
+    
+    function showGroupedSum() {
+      const numbers = gameState.decomposition.filter(d => d.type === 'number');
+      if (numbers.length < 2) return;
+      
+      let thousands = 0, hundreds = 0, tens = 0, units = 0;
+      
+      numbers.forEach(n => {
+        if (n.value >= 1000) thousands += n.value;
+        else if (n.value >= 100) hundreds += n.value;
+        else if (n.value >= 10) tens += n.value;
+        else units += n.value;
+      });
+      
+      const container = document.getElementById('decompose-answer');
+      const sumDiv = document.createElement('div');
+      sumDiv.className = 'w-full mt-3 pt-3 border-t-2 border-purple-200 text-center';
+      
+      let parts = [];
+      if (thousands > 0) parts.push(`<span class="text-green-600 font-bold">${thousands}</span>`);
+      if (hundreds > 0) parts.push(`<span class="text-yellow-600 font-bold">${hundreds}</span>`);
+      if (tens > 0) parts.push(`<span class="text-red-600 font-bold">${tens}</span>`);
+      if (units > 0) parts.push(`<span class="text-blue-600 font-bold">${units}</span>`);
+      
+      const total = thousands + hundreds + tens + units;
+      sumDiv.innerHTML = `
+        <p class="text-sm text-gray-600 mb-1">Agrupando por valor posicional:</p>
+        <p class="text-lg">${parts.join(' + ')} = <span class="title-font text-purple-700 text-xl">${total}</span></p>
+      `;
+      container.appendChild(sumDiv);
+    }
+    
+    function removeDecomposeItem(index) {
+      gameState.decomposition.splice(index, 1);
+      // Limpiar operadores huérfanos
+      while (gameState.decomposition.length > 0 && 
+             gameState.decomposition[gameState.decomposition.length - 1].type === 'operator') {
+        gameState.decomposition.pop();
+      }
+      updateDecomposeDisplay();
+    }
+    
+    function getColorClass(value) {
+      if (value >= 1000) return 'bg-green-500';
+      if (value >= 100) return 'bg-yellow-500';
+      if (value >= 10) return 'bg-red-500';
+      return 'bg-blue-500';
+    }
+    
+    // Verificar respuesta
+    function checkAnswer() {
+      if (!gameState.mode || !gameState.currentProblem) return;
+      
+      gameState.attempts++;
+      let isCorrect = false;
+      
+      if (gameState.mode === 'representar' || gameState.mode === 'sumar') {
+        isCorrect = gameState.currentValue === gameState.targetNumber;
+      } else if (gameState.mode === 'descomponer') {
+        const numbers = gameState.decomposition.filter(d => d.type === 'number');
+        const sum = numbers.reduce((acc, n) => acc + n.value, 0);
+        isCorrect = sum === gameState.targetNumber;
+      }
+      
+      if (isCorrect) {
+        gameState.correct++;
+        gameState.streak++;
+        showResult(true);
+        createStars();
+      } else {
+        gameState.streak = 0;
+        showResult(false);
+      }
+      
+      updateScores();
+    }
+    
+    // Mostrar resultado
+    function showResult(success) {
+      const resultDiv = document.getElementById('result-message');
+      const resultText = document.getElementById('result-text');
+      
+      resultDiv.classList.remove('hidden');
+      
+      if (success) {
+        const messages = [
+          '🎉 ¡Excelente trabajo! 🎉',
+          '⭐ ¡Eres un genio matemático! ⭐',
+          '🌟 ¡Fantástico! ¡Lo lograste! 🌟',
+          '🏆 ¡Campeón de las matemáticas! 🏆',
+          '✨ ¡Increíble! ¡Muy bien hecho! ✨'
+        ];
+        resultText.textContent = messages[Math.floor(Math.random() * messages.length)];
+        resultText.className = 'title-font text-2xl text-green-500 celebration';
+      } else {
+        const hints = [
+          '💪 ¡Casi lo logras! Intenta de nuevo',
+          '🤔 Revisa tu respuesta y vuelve a intentar',
+          '📚 ¡Tú puedes! Piensa en el valor de cada regleta'
+        ];
+        resultText.textContent = hints[Math.floor(Math.random() * hints.length)];
+        resultText.className = 'title-font text-2xl text-orange-500';
+        
+        // Mostrar pista
+        setTimeout(() => {
+          const hint = document.createElement('p');
+          hint.className = 'text-sm text-gray-600 mt-2';
+          hint.textContent = `💡 Pista: El resultado correcto es ${gameState.targetNumber}`;
+          resultDiv.querySelector('.bg-white').appendChild(hint);
+        }, 1000);
+      }
+    }
+    
+    function hideResult() {
+      document.getElementById('result-message').classList.add('hidden');
+    }
+    
+    // Actualizar puntuaciones
+    function updateScores() {
+      document.getElementById('correct-count').textContent = gameState.correct;
+      document.getElementById('attempts-count').textContent = gameState.attempts;
+      document.getElementById('streak-count').textContent = gameState.streak;
+    }
+    
+    // Crear estrellas de celebración
+    function createStars() {
+      const colors = ['#fbbf24', '#f472b6', '#60a5fa', '#4ade80', '#a78bfa'];
+      const emojis = ['⭐', '🌟', '✨', '💫', '🎉', '🎊'];
+      
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const star = document.createElement('div');
+          star.className = 'star';
+          star.style.left = Math.random() * 100 + '%';
+          star.style.top = Math.random() * 100 + '%';
+          star.style.color = colors[Math.floor(Math.random() * colors.length)];
+          star.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          
+          const container = document.getElementById('result-message');
+          container.style.position = 'relative';
+          container.appendChild(star);
+          
+          setTimeout(() => star.remove(), 1000);
+        }, i * 100);
+      }
+    }
+    
+    // Utilidad: número aleatorio
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    // Configuración del SDK
+    const defaultConfig = {
+      game_title: 'Matemáticas Mágicas'
+    };
+    
+    async function onConfigChange(config) {
+      const title = config.game_title || defaultConfig.game_title;
+      document.getElementById('main-title').textContent = `🔢 ${title} 🔢`;
+    }
+    
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+    
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['game_title', config.game_title || defaultConfig.game_title]
+      ]);
+    }
+    
+    // Inicializar SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+    
+    // Inicializar nivel por defecto
+    setLevel('easy');
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d288898c5b6b84c',t:'MTc3MTg2ODY5MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
