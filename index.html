@@ -35,7 +35,6 @@
             <button onclick="cerrarSesion()" class="bg-red-100 text-red-500 p-2 px-4 rounded-xl text-xs font-bold hover:bg-red-500 hover:text-white transition-all">SALIR 🚪</button>
         </div>
     </header>
-
     <section id="view-auth" class="text-center py-10 animate__animated animate__fadeIn">
         <div class="glass p-8 rounded-[3rem] shadow-2xl inline-block w-full max-w-md border-dashed border-pink-300">
             <div class="text-7xl mb-4 floating">🚀</div>
@@ -56,41 +55,29 @@
             </div>
         </div>
     </section>
+<section id="view-phases" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 animate__animated animate__backInUp">
 
-    <section id="view-phases" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 animate__animated animate__backInUp">
-        <button onclick="cargarJuegos(3)" class="btn-bounce bg-orange-400 p-8 rounded-[3rem] border-b-8 border-orange-600 text-white shadow-xl">
-            <div class="text-7xl mb-4">🖍️</div>
-            <h3 class="font-kids text-3xl italic">FASE 3</h3>
-        </button>
-        <button onclick="cargarJuegos(4)" class="btn-bounce bg-green-500 p-8 rounded-[3rem] border-b-8 border-green-700 text-white shadow-xl">
-            <div class="text-7xl mb-4">🧪</div>
-            <h3 class="font-kids text-3xl italic">FASE 4</h3>
-        </button>
-        <button onclick="cargarJuegos(5)" class="btn-bounce bg-purple-500 p-8 rounded-[3rem] border-b-8 border-purple-700 text-white shadow-xl">
-            <div class="text-7xl mb-4">🔭</div>
-            <h3 class="font-kids text-3xl italic">FASE 5</h3>
-        </button>
-        <button onclick="window.location.href='ingles.html'" class="btn-bounce bg-blue-500 p-8 rounded-[3rem] border-b-8 border-blue-700 text-white shadow-xl">
-    <div class="text-7xl mb-4">🌎</div>
-    <h3 class="font-kids text-3xl italic">ENGLISH</h3>
-</button>
-    </section>
+    <button onclick="cargarJuegos(3)" class="btn-bounce bg-orange-400 p-8 rounded-[3rem] border-b-8 border-orange-600 text-white shadow-xl">
+        <div class="text-7xl mb-4">🖍️</div>
+        <h3 class="font-kids text-3xl italic">FASE 3</h3>
+    </button>
 
-    <section id="view-game-list" class="hidden animate__animated animate__fadeIn">
-        <button onclick="volverMenu()" class="bg-white px-6 py-2 rounded-full font-bold text-blue-500 shadow-md mb-6 hover:bg-blue-50 transition-all">🏠 VOLVER</button>
-        <div id="game-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
-    </section>
+    <button onclick="cargarJuegos(4)" class="btn-bounce bg-green-500 p-8 rounded-[3rem] border-b-8 border-green-700 text-white shadow-xl">
+        <div class="text-7xl mb-4">🧪</div>
+        <h3 class="font-kids text-3xl italic">FASE 4</h3>
+    </button>
 
-    <section id="view-english" class="hidden animate__animated animate__zoomIn text-center">
-        <button onclick="volverMenu()" class="bg-white px-6 py-2 rounded-full font-bold text-blue-500 shadow-md mb-8 hover:bg-blue-50 transition-all">🏠 VOLVER</button>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <a href="animales.html" class="btn-bounce bg-white p-6 rounded-[2rem] border-b-8 border-yellow-400 shadow-lg block"><div class="text-5xl">🦁</div><h4 class="font-kids mt-2 text-yellow-600 uppercase">Animals</h4></a>
-            <a href="colores.html" class="btn-bounce bg-white p-6 rounded-[2rem] border-b-8 border-pink-400 shadow-lg block"><div class="text-5xl">🎨</div><h4 class="font-kids mt-2 text-pink-600 uppercase">Colors</h4></a>
-            <a href="numeros.html" class="btn-bounce bg-white p-6 rounded-[2rem] border-b-8 border-blue-400 shadow-lg block"><div class="text-5xl">🔢</div><h4 class="font-kids mt-2 text-blue-600 uppercase">Numbers</h4></a>
-            <a href="frutas.html" class="btn-bounce bg-white p-6 rounded-[2rem] border-b-8 border-green-400 shadow-lg block"><div class="text-5xl">🍎</div><h4 class="font-kids mt-2 text-green-600 uppercase">Fruits</h4></a>
-        </div>
-    </section>
+    <button onclick="cargarJuegos(5)" class="btn-bounce bg-purple-500 p-8 rounded-[3rem] border-b-8 border-purple-700 text-white shadow-xl">
+        <div class="text-7xl mb-4">🔭</div>
+        <h3 class="font-kids text-3xl italic">FASE 5</h3>
+    </button>
 
+    <button onclick="window.location.href='ingles.html'" class="btn-bounce bg-blue-500 p-8 rounded-[3rem] border-b-8 border-blue-700 text-white shadow-xl">
+        <div class="text-7xl mb-4">🌎</div>
+        <h3 class="font-kids text-3xl italic">ENGLISH</h3>
+    </button>
+
+</section>
 <script>
 
 window.addEventListener("DOMContentLoaded", function(){
@@ -191,18 +178,11 @@ function cerrarSesion() {
     localStorage.removeItem("sesion_activa");
     location.reload(); 
 }
-
-
-function mostrarIngles() {   
-    document.getElementById('view-phases').classList.add('hidden');   
-    document.getElementById('view-english').classList.remove('hidden');   
-}
-
 function volverMenu() {   
     document.getElementById('view-game-list').classList.add('hidden');   
-    document.getElementById('view-english').classList.add('hidden');   
     document.getElementById('view-phases').classList.remove('hidden');   
 }
+
 
 /* ===========================
    TUS JUEGOS EXACTOS (SIN CAMBIOS)
@@ -270,5 +250,12 @@ function cargarJuegos(f) {
 }
 
 </script>
+
+<section id="view-game-list" class="hidden p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div id="game-grid"></div>
+    <button onclick="volverMenu()" class="mt-8 bg-blue-500 text-white px-6 py-3 rounded-2xl shadow-lg font-bold hover:bg-blue-600 transition-all">
+        🏠 Volver al menú
+    </button>
+</section>
 </body>
 </html>
