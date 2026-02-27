@@ -93,6 +93,16 @@
 
 <script>
 
+window.addEventListener("DOMContentLoaded", function(){
+    const sesionActiva = localStorage.getItem("sesion_activa");
+
+    if(sesionActiva === "si"){
+        document.getElementById('view-auth').classList.add('hidden');
+        document.getElementById('main-header').classList.remove('hidden');
+        document.getElementById('view-phases').classList.remove('hidden');
+    }
+});
+
 /* ===========================
    CONFIGURACIÓN MAESTRA
 =========================== */
@@ -119,14 +129,17 @@ function intentarLogin() {
     }
 
     // ACCESO GENERAL MENSUAL
-    if (u === USUARIO_GENERAL && p === PASSWORD_MENSUAL) {
-        document.getElementById('view-auth').classList.add('hidden');
-        document.getElementById('main-header').classList.remove('hidden');
-        document.getElementById('view-phases').classList.remove('hidden');
-        document.getElementById('display-user').innerText = "BIENVENIDO";
-    } else {
-        alert("❌ Usuario o contraseña incorrectos.");
-    }
+  if (u === USUARIO_GENERAL && p === PASSWORD_MENSUAL) {
+    document.getElementById('view-auth').classList.add('hidden');
+    document.getElementById('main-header').classList.remove('hidden');
+    document.getElementById('view-phases').classList.remove('hidden');
+    document.getElementById('display-user').innerText = "BIENVENIDO";
+
+    localStorage.setItem("sesion_activa", "si");
+
+} else {
+    alert("❌ Usuario o contraseña incorrectos.");
+}
 }
 
 /* ===========================
@@ -174,7 +187,11 @@ function cambiarPassword() {
    NAVEGACIÓN (NO TOCADA)
 =========================== */
 
-function cerrarSesion() { location.reload(); }
+function cerrarSesion() { 
+    localStorage.removeItem("sesion_activa");
+    location.reload(); 
+}
+
 
 function mostrarIngles() {   
     document.getElementById('view-phases').classList.add('hidden');   
