@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juegos Educativos - Tercer Grado</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Comic+Neue:wght@400;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Fredoka', sans-serif; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+      50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.8); }
+    }
+    
+    @keyframes bounce-in {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100px) rotate(720deg); opacity: 0; }
+    }
+    
+    .float-animation { animation: float 3s ease-in-out infinite; }
+    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+    .bounce-in { animation: bounce-in 0.5s ease-out forwards; }
+    .shake { animation: shake 0.5s ease-in-out; }
+    
+    .game-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .game-card:hover {
+      transform: translateY(-8px) scale(1.02);
+    }
+    
+    .btn-game {
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-game:hover {
+      transform: scale(1.05);
+    }
+    
+    .btn-game:active {
+      transform: scale(0.95);
+    }
+    
+    .progress-bar {
+      transition: width 0.5s ease-out;
+    }
+    
+    .option-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .option-btn:hover:not(:disabled) {
+      transform: scale(1.03);
+    }
+    
+    .option-btn.correct {
+      background: linear-gradient(135deg, #10b981, #059669) !important;
+      animation: bounce-in 0.3s ease-out;
+    }
+    
+    .option-btn.incorrect {
+      background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+      animation: shake 0.5s ease-in-out;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app" class="min-h-full bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"><!-- Pantalla Principal -->
+   <div id="main-menu" class="min-h-full p-4 md:p-8"><!-- Header -->
+    <header class="text-center mb-8">
+     <div class="inline-block">
+      <h1 id="main-title" class="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-pink-300 to-cyan-300 mb-2 float-animation">🎮 Juegos Educativos</h1>
+      <p id="welcome-msg" class="text-lg md:text-xl text-purple-200">Tercer Grado - Fase 4 | ¡Aprende jugando!</p>
+     </div>
+     <div class="mt-4 flex justify-center gap-4 flex-wrap">
+      <div class="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-yellow-300">
+       ⭐ Puntos: <span id="total-points">0</span>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 text-green-300">
+       🏆 Juegos completados: <span id="games-completed">0</span>/10
+      </div>
+     </div>
+    </header><!-- Grid de Juegos -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Juego 1: Sistema Locomotor -->
+     <div class="game-card bg-gradient-to-br from-red-500/20 to-orange-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(1)">
+      <div class="text-4xl mb-3">
+       🦴
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">El Cuerpo en Movimiento</h3>
+      <p class="text-sm text-gray-300 mb-3">Sistema Locomotor: huesos, músculos y articulaciones</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-orange-300">PDA:</strong> Identifica que el sistema locomotor está conformado por el sistema óseo y muscular, relacionados con soporte, protección y movimiento.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div><!-- Juego 2: Sistema Sexual -->
+     <div class="game-card bg-gradient-to-br from-pink-500/20 to-purple-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(2)">
+      <div class="text-4xl mb-3">
+       👫
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Conociendo Mi Cuerpo</h3>
+      <p class="text-sm text-gray-300 mb-3">Cambios en la pubertad y diferencias biológicas</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-pink-300">PDA:</strong> Describe semejanzas y diferencias entre los órganos sexuales, sus nombres correctos e identifica que determinan el sexo biológico.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div><!-- Juego 3: Alimentación -->
+     <div class="game-card bg-gradient-to-br from-green-500/20 to-emerald-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(3)">
+      <div class="text-4xl mb-3">
+       🥗
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Plato del Bien Comer</h3>
+      <p class="text-sm text-gray-300 mb-3">Alimentación saludable y grupos de alimentos</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-green-300">PDA:</strong> Explica la importancia del consumo de una alimentación higiénica y variada según el Plato del Bien Comer.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div><!-- Juego 4: Animales y Locomoción -->
+     <div class="game-card bg-gradient-to-br from-amber-500/20 to-yellow-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(4)">
+      <div class="text-4xl mb-3">
+       🦁
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Animales en Movimiento</h3>
+      <p class="text-sm text-gray-300 mb-3">Locomoción animal y búsqueda de alimento</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-yellow-300">PDA:</strong> Indaga y describe la locomoción de animales según sus formas de desplazamiento para buscar alimento, agua o refugio.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div><!-- Juego 5: Ecosistemas -->
+     <div class="game-card bg-gradient-to-br from-cyan-500/20 to-blue-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(5)">
+      <div class="text-4xl mb-3">
+       🌍
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Nuestro Ecosistema</h3>
+      <p class="text-sm text-gray-300 mb-3">Aire, agua, suelo y Sol para los seres vivos</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-cyan-300">PDA:</strong> Describe la importancia del aire, agua, suelo y Sol para todos los seres vivos y sus relaciones para alimentación y protección.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div><!-- Juego 6: Números -->
+     <div class="game-card bg-gradient-to-br from-violet-500/20 to-indigo-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(6)">
+      <div class="text-4xl mb-3">
+       🔢
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Mundo de Números</h3>
+      <p class="text-sm text-gray-300 mb-3">Sucesión numérica hasta cuatro cifras</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-violet-300">PDA:</strong> Expresa oralmente la sucesión numérica hasta cuatro cifras de manera ascendente y descendente a partir de un número dado.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-violet-500 to-indigo-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div><!-- Juego 7: Suma y Resta -->
+     <div class="game-card bg-gradient-to-br from-rose-500/20 to-red-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(7)">
+      <div class="text-4xl mb-3">
+       ➕
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Suma y Resta Mágica</h3>
+      <p class="text-sm text-gray-300 mb-3">Operaciones inversas con números de tres cifras</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-rose-300">PDA:</strong> Resuelve situaciones problemáticas que implican sumas de números naturales de hasta tres cifras con algoritmo convencional.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-rose-500 to-red-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div><!-- Juego 8: Multiplicación -->
+     <div class="game-card bg-gradient-to-br from-teal-500/20 to-green-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(8)">
+      <div class="text-4xl mb-3">
+       ✖️
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Multiplicación Veloz</h3>
+      <p class="text-sm text-gray-300 mb-3">Multiplicaciones con producto de tres cifras</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-teal-300">PDA:</strong> Resuelve multiplicaciones cuyo producto es de tres cifras mediante suma de multiplicaciones parciales o multiplicaciones por 10, 20 o 30.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-teal-500 to-green-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div><!-- Juego 9: Geometría -->
+     <div class="game-card bg-gradient-to-br from-fuchsia-500/20 to-pink-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(9)">
+      <div class="text-4xl mb-3">
+       📐
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Figuras Geométricas</h3>
+      <p class="text-sm text-gray-300 mb-3">Cuerpos geométricos y sus características</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-fuchsia-300">PDA:</strong> Identifica figuras geométricas que componen objetos y construye prismas rectos reconociendo cuadrados y rectángulos.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-fuchsia-500 to-pink-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div><!-- Juego 10: Medición -->
+     <div class="game-card bg-gradient-to-br from-sky-500/20 to-cyan-500/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20 cursor-pointer" onclick="startGame(10)">
+      <div class="text-4xl mb-3">
+       📏
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Medir es Divertido</h3>
+      <p class="text-sm text-gray-300 mb-3">Longitud, masa y capacidad</p>
+      <div class="bg-black/30 rounded-lg p-3 text-xs text-gray-400"><strong class="text-sky-300">PDA:</strong> Resuelve situaciones que impliquen medición de longitudes, masas y capacidades con metro, kilogramo, litro y sus fracciones.
+      </div><button class="mt-4 w-full btn-game bg-gradient-to-r from-sky-500 to-cyan-500 text-white font-bold py-2 px-4 rounded-xl"> 🎯 Jugar </button>
+     </div>
+    </div>
+   </div><!-- Pantalla de Juego -->
+   <div id="game-screen" class="min-h-full p-4 md:p-8 hidden">
+    <div class="max-w-4xl mx-auto"><!-- Header del juego -->
+     <div class="flex flex-wrap justify-between items-center mb-6 gap-4"><button onclick="backToMenu()" class="btn-game bg-white/20 hover:bg-white/30 text-white font-bold py-2 px-4 rounded-xl flex items-center gap-2"> ← Volver </button>
+      <div class="flex gap-4 flex-wrap">
+       <div class="bg-yellow-500/30 rounded-full px-4 py-2 text-yellow-300">
+        ⭐ <span id="game-points">0</span> pts
+       </div>
+       <div class="bg-green-500/30 rounded-full px-4 py-2 text-green-300">
+        ❤️ <span id="lives">3</span> vidas
+       </div>
+      </div>
+     </div><!-- Info del contenido -->
+     <div id="content-info" class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-6 border border-white/20">
+      <h2 id="game-title" class="text-2xl font-bold text-white mb-2"></h2>
+      <div id="game-pda" class="bg-black/30 rounded-lg p-4 text-sm text-gray-300"></div>
+     </div><!-- Barra de progreso -->
+     <div class="mb-6">
+      <div class="flex justify-between text-sm text-gray-300 mb-2"><span>Pregunta <span id="current-question">1</span> de <span id="total-questions">5</span></span> <span id="progress-percent">0%</span>
+      </div>
+      <div class="h-3 bg-white/20 rounded-full overflow-hidden">
+       <div id="progress-bar" class="progress-bar h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full" style="width: 0%"></div>
+      </div>
+     </div><!-- Área de pregunta -->
+     <div id="question-area" class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/20">
+      <p id="question-text" class="text-xl md:text-2xl font-bold text-white mb-6 text-center"></p>
+      <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+     </div><!-- Feedback -->
+     <div id="feedback-area" class="mt-6 text-center hidden">
+      <div id="feedback-message" class="text-2xl font-bold mb-4"></div><button id="next-btn" onclick="nextQuestion()" class="btn-game bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-3 px-8 rounded-xl text-lg"> Siguiente → </button>
+     </div>
+    </div>
+   </div><!-- Pantalla de Resultados -->
+   <div id="results-screen" class="min-h-full p-4 md:p-8 hidden flex items-center justify-center">
+    <div class="max-w-lg w-full bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20 text-center">
+     <div id="result-emoji" class="text-8xl mb-4"></div>
+     <h2 id="result-title" class="text-3xl font-bold text-white mb-2"></h2>
+     <p id="result-message" class="text-gray-300 mb-6"></p>
+     <div class="bg-black/30 rounded-xl p-6 mb-6">
+      <div class="grid grid-cols-2 gap-4 text-center">
+       <div>
+        <div class="text-3xl font-bold text-yellow-300" id="final-score">
+         0
+        </div>
+        <div class="text-sm text-gray-400">
+         Puntos
+        </div>
+       </div>
+       <div>
+        <div class="text-3xl font-bold text-green-300" id="correct-answers">
+         0
+        </div>
+        <div class="text-sm text-gray-400">
+         Correctas
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="flex flex-col gap-3"><button onclick="restartGame()" class="btn-game bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold py-3 px-6 rounded-xl"> 🔄 Jugar de nuevo </button> <button onclick="backToMenu()" class="btn-game bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold py-3 px-6 rounded-xl"> 🏠 Volver al menú </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // Configuración por defecto
+    const defaultConfig = {
+      main_title: '🎮 Juegos Educativos',
+      welcome_message: 'Tercer Grado - Fase 4 | ¡Aprende jugando!'
+    };
+    
+    // Estado del juego
+    let gameState = {
+      currentGame: null,
+      currentQuestion: 0,
+      points: 0,
+      lives: 3,
+      correctAnswers: 0,
+      totalPoints: 0,
+      gamesCompleted: new Set(),
+      questions: []
+    };
+    
+    // Datos de los juegos
+    const gamesData = {
+      1: {
+        title: '🦴 El Cuerpo en Movimiento',
+        pda: '<strong>PDA:</strong> Identifica y describe que el sistema locomotor está conformado por el sistema óseo (huesos y columna vertebral) y el sistema muscular (músculos y articulaciones), y que sus funciones se relacionan con el soporte, protección y movimiento del cuerpo.',
+        color: 'from-red-500 to-orange-500',
+        questions: [
+          {
+            question: '¿Qué dos sistemas conforman el sistema locomotor?',
+            options: ['Sistema óseo y muscular', 'Sistema digestivo y respiratorio', 'Sistema circulatorio y nervioso', 'Sistema excretor y reproductor'],
+            correct: 0
+          },
+          {
+            question: '¿Cuál es la función principal de los huesos?',
+            options: ['Producir energía', 'Dar soporte y protección al cuerpo', 'Digerir alimentos', 'Transportar oxígeno'],
+            correct: 1
+          },
+          {
+            question: '¿Qué estructura protege la médula espinal?',
+            options: ['El cráneo', 'Las costillas', 'La columna vertebral', 'La pelvis'],
+            correct: 2
+          },
+          {
+            question: '¿Qué permiten las articulaciones?',
+            options: ['Respirar mejor', 'El movimiento del cuerpo', 'Digerir comida', 'Ver con claridad'],
+            correct: 1
+          },
+          {
+            question: '¿Los músculos se unen a los huesos mediante...?',
+            options: ['Venas', 'Arterias', 'Tendones', 'Nervios'],
+            correct: 2
+          }
+        ]
+      },
+      2: {
+        title: '👫 Conociendo Mi Cuerpo',
+        pda: '<strong>PDA:</strong> Describe semejanzas y diferencias entre los órganos sexuales de las personas, sus nombres correctos y en su lengua materna, e identifica que estos determinan el sexo biológico.',
+        color: 'from-pink-500 to-purple-500',
+        questions: [
+          {
+            question: '¿Qué determina el sexo biológico de una persona?',
+            options: ['La ropa que usa', 'Los órganos sexuales', 'El color de cabello', 'La estatura'],
+            correct: 1
+          },
+          {
+            question: '¿Durante qué etapa ocurren cambios importantes en el cuerpo?',
+            options: ['La infancia', 'La pubertad', 'La vejez', 'El nacimiento'],
+            correct: 1
+          },
+          {
+            question: '¿Por qué es importante conocer los nombres correctos de las partes del cuerpo?',
+            options: ['Para presumir', 'Para cuidar nuestra salud y comunicarnos correctamente', 'No es importante', 'Solo los doctores deben saberlo'],
+            correct: 1
+          },
+          {
+            question: '¿Qué cambios físicos ocurren en la pubertad?',
+            options: ['Solo cambio de voz', 'Crecimiento, cambios en el cuerpo y desarrollo', 'Ningún cambio', 'Solo crecimiento de cabello'],
+            correct: 1
+          },
+          {
+            question: '¿Es normal que los cuerpos de las personas sean diferentes?',
+            options: ['No, todos deberían ser iguales', 'Sí, cada cuerpo es único y especial', 'Solo algunos son diferentes', 'Las diferencias son malas'],
+            correct: 1
+          }
+        ]
+      },
+      3: {
+        title: '🥗 Plato del Bien Comer',
+        pda: '<strong>PDA:</strong> Explica la importancia del consumo de una alimentación higiénica y variada que incluya verduras y frutas; cereales y tubérculos; leguminosas y alimentos de origen animal, acorde con el Plato del Bien Comer.',
+        color: 'from-green-500 to-emerald-500',
+        questions: [
+          {
+            question: '¿Cuáles son los tres grupos de alimentos del Plato del Bien Comer?',
+            options: ['Dulces, salados y ácidos', 'Verduras y frutas; Cereales y tubérculos; Leguminosas y alimentos de origen animal', 'Desayuno, comida y cena', 'Líquidos, sólidos y gaseosos'],
+            correct: 1
+          },
+          {
+            question: '¿Qué grupo de alimentos debemos comer en mayor cantidad?',
+            options: ['Carnes', 'Dulces', 'Verduras y frutas', 'Refrescos'],
+            correct: 2
+          },
+          {
+            question: '¿Qué alimentos son ejemplos de leguminosas?',
+            options: ['Manzanas y peras', 'Frijoles, lentejas y garbanzos', 'Pollo y pescado', 'Pan y tortillas'],
+            correct: 1
+          },
+          {
+            question: '¿Por qué es importante lavar las frutas y verduras antes de comerlas?',
+            options: ['Para que sepan mejor', 'Para eliminar suciedad y gérmenes', 'No es necesario lavarlas', 'Para que crezcan más'],
+            correct: 1
+          },
+          {
+            question: '¿Qué significa tener una alimentación variada?',
+            options: ['Comer solo un tipo de alimento', 'Comer diferentes alimentos de todos los grupos', 'Comer mucha cantidad', 'Comer solo lo que nos gusta'],
+            correct: 1
+          }
+        ]
+      },
+      4: {
+        title: '🦁 Animales en Movimiento',
+        pda: '<strong>PDA:</strong> Indaga y describe la locomoción de animales a partir de reconocer las formas en las que se mueven y desplazan en la búsqueda de alimento, agua o refugio y su relación con las características del lugar donde viven.',
+        color: 'from-amber-500 to-yellow-500',
+        questions: [
+          {
+            question: '¿Cómo se desplazan los peces?',
+            options: ['Caminando', 'Volando', 'Nadando', 'Saltando'],
+            correct: 2
+          },
+          {
+            question: '¿Por qué los animales se mueven de un lugar a otro?',
+            options: ['Solo por diversión', 'Para buscar alimento, agua o refugio', 'No se mueven', 'Porque les obligan'],
+            correct: 1
+          },
+          {
+            question: '¿Qué tipo de locomoción tiene el águila?',
+            options: ['Nada', 'Repta', 'Vuela', 'Salta'],
+            correct: 2
+          },
+          {
+            question: '¿Cómo se relaciona la forma de moverse de un animal con su hábitat?',
+            options: ['No hay relación', 'Los animales se adaptan a su ambiente para sobrevivir', 'Todos se mueven igual', 'El hábitat no importa'],
+            correct: 1
+          },
+          {
+            question: '¿Qué animales reptan para desplazarse?',
+            options: ['Perros y gatos', 'Serpientes y lagartijas', 'Pájaros y murciélagos', 'Peces y delfines'],
+            correct: 1
+          }
+        ]
+      },
+      5: {
+        title: '🌍 Nuestro Ecosistema',
+        pda: '<strong>PDA:</strong> Describe la importancia del aire, el agua, el suelo y el Sol para todos los seres vivos, a partir de representar las relaciones que establecen para su alimentación y protección.',
+        color: 'from-cyan-500 to-blue-500',
+        questions: [
+          {
+            question: '¿Qué elementos son esenciales para la vida de todos los seres vivos?',
+            options: ['Solo el agua', 'Aire, agua, suelo y Sol', 'Solo la comida', 'Los juguetes'],
+            correct: 1
+          },
+          {
+            question: '¿Para qué necesitan las plantas la luz del Sol?',
+            options: ['Para estar calientes', 'Para realizar la fotosíntesis y producir alimento', 'Para verse bonitas', 'No la necesitan'],
+            correct: 1
+          },
+          {
+            question: '¿Qué obtienen los animales del aire?',
+            options: ['Comida', 'Oxígeno para respirar', 'Agua', 'Refugio'],
+            correct: 1
+          },
+          {
+            question: '¿Por qué es importante cuidar el agua?',
+            options: ['No es importante', 'Porque es esencial para la vida de todos los seres vivos', 'Solo para bañarnos', 'Para tener piscinas'],
+            correct: 1
+          },
+          {
+            question: '¿Qué función tiene el suelo para las plantas?',
+            options: ['Ninguna', 'Les da nutrientes y las sostiene', 'Las enfría', 'Las hace crecer hacia abajo'],
+            correct: 1
+          }
+        ]
+      },
+      6: {
+        title: '🔢 Mundo de Números',
+        pda: '<strong>PDA:</strong> Expresa oralmente la sucesión numérica hasta cuatro cifras, en español, de manera ascendente y descendente a partir de un número natural dado.',
+        color: 'from-violet-500 to-indigo-500',
+        questions: [
+          {
+            question: '¿Cuál es el número que sigue en la sucesión: 1000, 2000, 3000, ___?',
+            options: ['3500', '4000', '5000', '3100'],
+            correct: 1
+          },
+          {
+            question: '¿Qué número viene antes del 5000 en orden descendente de 1000 en 1000?',
+            options: ['4000', '6000', '5500', '4500'],
+            correct: 1
+          },
+          {
+            question: '¿Cuántas cifras tiene el número 3456?',
+            options: ['Tres', 'Cuatro', 'Cinco', 'Dos'],
+            correct: 1
+          },
+          {
+            question: 'En la sucesión 100, 200, 300, 400... ¿cuál es el patrón?',
+            options: ['Sumar 10', 'Sumar 100', 'Restar 100', 'Multiplicar por 2'],
+            correct: 1
+          },
+          {
+            question: '¿Cuál de estos números es mayor?',
+            options: ['1999', '2001', '1899', '2000'],
+            correct: 1
+          }
+        ]
+      },
+      7: {
+        title: '➕ Suma y Resta Mágica',
+        pda: '<strong>PDA:</strong> Resuelve situaciones problemáticas vinculadas a su contexto que implican sumas de números naturales de hasta tres cifras utilizando el algoritmo convencional.',
+        color: 'from-rose-500 to-red-500',
+        questions: [
+          {
+            question: '¿Cuánto es 245 + 153?',
+            options: ['398', '388', '408', '298'],
+            correct: 0
+          },
+          {
+            question: 'María tiene 320 estampas y su hermano le regala 175 más. ¿Cuántas tiene ahora?',
+            options: ['495', '405', '485', '505'],
+            correct: 0
+          },
+          {
+            question: 'Si sumo 467 + 233, ¿qué resultado obtengo?',
+            options: ['600', '700', '690', '710'],
+            correct: 1
+          },
+          {
+            question: '¿Cuánto es 500 - 238?',
+            options: ['262', '272', '252', '242'],
+            correct: 0
+          },
+          {
+            question: 'En una escuela hay 456 alumnos y llegan 144 nuevos. ¿Cuántos hay en total?',
+            options: ['590', '600', '610', '580'],
+            correct: 1
+          }
+        ]
+      },
+      8: {
+        title: '✖️ Multiplicación Veloz',
+        pda: '<strong>PDA:</strong> Resuelve multiplicaciones cuyo producto es un número natural de tres cifras mediante diversos procedimientos, como suma de multiplicaciones parciales o multiplicaciones por 10, 20 o 30.',
+        color: 'from-teal-500 to-green-500',
+        questions: [
+          {
+            question: '¿Cuánto es 25 × 10?',
+            options: ['250', '35', '2500', '150'],
+            correct: 0
+          },
+          {
+            question: '¿Cuánto es 15 × 20?',
+            options: ['200', '300', '150', '350'],
+            correct: 1
+          },
+          {
+            question: 'Si tienes 30 bolsas con 12 dulces cada una, ¿cuántos dulces hay en total?',
+            options: ['360', '320', '340', '300'],
+            correct: 0
+          },
+          {
+            question: '¿Cuánto es 45 × 10?',
+            options: ['45', '450', '4500', '55'],
+            correct: 1
+          },
+          {
+            question: 'Para calcular 18 × 20, ¿qué operación es correcta?',
+            options: ['18 + 20', '18 × 2 × 10', '18 ÷ 20', '18 - 20'],
+            correct: 1
+          }
+        ]
+      },
+      9: {
+        title: '📐 Figuras Geométricas',
+        pda: '<strong>PDA:</strong> Identifica las figuras geométricas que componen diversos objetos (edificios, casas, cajas, muebles) y construye prismas rectos a partir de reconocer la configuración de cuadrados y rectángulos que los componen.',
+        color: 'from-fuchsia-500 to-pink-500',
+        questions: [
+          {
+            question: '¿Qué figura geométrica tiene 4 lados iguales y 4 ángulos rectos?',
+            options: ['Triángulo', 'Círculo', 'Cuadrado', 'Pentágono'],
+            correct: 2
+          },
+          {
+            question: '¿Qué forma tiene generalmente una caja de zapatos?',
+            options: ['Esfera', 'Prisma rectangular', 'Cono', 'Pirámide'],
+            correct: 1
+          },
+          {
+            question: '¿Cuántas caras tiene un cubo?',
+            options: ['4', '6', '8', '12'],
+            correct: 1
+          },
+          {
+            question: '¿Qué figuras planas componen un prisma rectangular?',
+            options: ['Círculos', 'Triángulos', 'Rectángulos y/o cuadrados', 'Hexágonos'],
+            correct: 2
+          },
+          {
+            question: '¿Qué figura geométrica tiene forma de pelota?',
+            options: ['Cubo', 'Esfera', 'Cilindro', 'Cono'],
+            correct: 1
+          }
+        ]
+      },
+      10: {
+        title: '📏 Medir es Divertido',
+        pda: '<strong>PDA:</strong> Resuelve situaciones problemáticas vinculadas a su contexto que impliquen medición, estimación y comparación de longitudes, masas y capacidades, con el uso del metro, kilogramo, litro, medios y cuartos de estas unidades.',
+        color: 'from-sky-500 to-cyan-500',
+        questions: [
+          {
+            question: '¿Qué unidad usamos para medir longitudes?',
+            options: ['Kilogramo', 'Litro', 'Metro', 'Grado'],
+            correct: 2
+          },
+          {
+            question: '¿Cuántos mililitros hay en medio litro?',
+            options: ['250 ml', '500 ml', '750 ml', '1000 ml'],
+            correct: 1
+          },
+          {
+            question: '¿Qué unidad usamos para medir el peso de las frutas en el mercado?',
+            options: ['Metros', 'Litros', 'Kilogramos', 'Centímetros'],
+            correct: 2
+          },
+          {
+            question: '¿Cuántos centímetros hay en un metro?',
+            options: ['10', '50', '100', '1000'],
+            correct: 2
+          },
+          {
+            question: 'Si un cuarto de kilogramo equivale a 250 gramos, ¿cuánto es medio kilogramo?',
+            options: ['250 gramos', '500 gramos', '750 gramos', '125 gramos'],
+            correct: 1
+          }
+        ]
+      }
+    };
+    
+    // Funciones del juego
+    function startGame(gameId) {
+      gameState.currentGame = gameId;
+      gameState.currentQuestion = 0;
+      gameState.points = 0;
+      gameState.lives = 3;
+      gameState.correctAnswers = 0;
+      gameState.questions = [...gamesData[gameId].questions];
+      shuffleArray(gameState.questions);
+      
+      const game = gamesData[gameId];
+      document.getElementById('game-title').textContent = game.title;
+      document.getElementById('game-pda').innerHTML = game.pda;
+      document.getElementById('total-questions').textContent = gameState.questions.length;
+      
+      updateGameUI();
+      showScreen('game-screen');
+      loadQuestion();
+    }
+    
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+    
+    function loadQuestion() {
+      const question = gameState.questions[gameState.currentQuestion];
+      document.getElementById('question-text').textContent = question.question;
+      
+      const optionsContainer = document.getElementById('options-container');
+      optionsContainer.innerHTML = '';
+      
+      const shuffledOptions = question.options.map((opt, idx) => ({ text: opt, originalIndex: idx }));
+      shuffleArray(shuffledOptions);
+      
+      shuffledOptions.forEach((option, index) => {
+        const btn = document.createElement('button');
+        btn.className = `option-btn bg-white/20 hover:bg-white/30 text-white font-semibold py-4 px-6 rounded-xl text-left border-2 border-transparent hover:border-white/40`;
+        btn.innerHTML = `<span class="text-xl mr-3">${['A', 'B', 'C', 'D'][index]}.</span> ${option.text}`;
+        btn.dataset.originalIndex = option.originalIndex;
+        btn.onclick = () => selectAnswer(btn, option.originalIndex);
+        optionsContainer.appendChild(btn);
+      });
+      
+      document.getElementById('feedback-area').classList.add('hidden');
+      updateProgress();
+    }
+    
+    function selectAnswer(btn, selectedIndex) {
+      const question = gameState.questions[gameState.currentQuestion];
+      const isCorrect = selectedIndex === question.correct;
+      
+      // Deshabilitar todos los botones
+      document.querySelectorAll('.option-btn').forEach(b => {
+        b.disabled = true;
+        if (parseInt(b.dataset.originalIndex) === question.correct) {
+          b.classList.add('correct');
+        }
+      });
+      
+      if (isCorrect) {
+        btn.classList.add('correct');
+        gameState.points += 100;
+        gameState.correctAnswers++;
+        showFeedback(true);
+      } else {
+        btn.classList.add('incorrect');
+        gameState.lives--;
+        showFeedback(false);
+      }
+      
+      updateGameUI();
+      
+      if (gameState.lives <= 0) {
+        setTimeout(() => endGame(false), 1500);
+      }
+    }
+    
+    function showFeedback(isCorrect) {
+      const feedbackArea = document.getElementById('feedback-area');
+      const feedbackMessage = document.getElementById('feedback-message');
+      
+      feedbackArea.classList.remove('hidden');
+      
+      if (isCorrect) {
+        feedbackMessage.innerHTML = '<span class="text-green-400">✅ ¡Correcto! +100 puntos</span>';
+      } else {
+        feedbackMessage.innerHTML = '<span class="text-red-400">❌ Incorrecto. Observa la respuesta correcta.</span>';
+      }
+    }
+    
+    function nextQuestion() {
+      gameState.currentQuestion++;
+      
+      if (gameState.currentQuestion >= gameState.questions.length) {
+        endGame(true);
+      } else {
+        loadQuestion();
+      }
+    }
+    
+    function updateProgress() {
+      const progress = ((gameState.currentQuestion) / gameState.questions.length) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+      document.getElementById('progress-percent').textContent = `${Math.round(progress)}%`;
+      document.getElementById('current-question').textContent = gameState.currentQuestion + 1;
+    }
+    
+    function updateGameUI() {
+      document.getElementById('game-points').textContent = gameState.points;
+      document.getElementById('lives').textContent = gameState.lives;
+    }
+    
+    function endGame(completed) {
+      gameState.totalPoints += gameState.points;
+      
+      if (completed && gameState.correctAnswers >= 3) {
+        gameState.gamesCompleted.add(gameState.currentGame);
+      }
+      
+      document.getElementById('total-points').textContent = gameState.totalPoints;
+      document.getElementById('games-completed').textContent = gameState.gamesCompleted.size;
+      
+      const resultEmoji = document.getElementById('result-emoji');
+      const resultTitle = document.getElementById('result-title');
+      const resultMessage = document.getElementById('result-message');
+      
+      if (gameState.lives <= 0) {
+        resultEmoji.textContent = '😢';
+        resultTitle.textContent = '¡Oh no!';
+        resultMessage.textContent = 'Se acabaron tus vidas. ¡Inténtalo de nuevo!';
+      } else if (gameState.correctAnswers === gameState.questions.length) {
+        resultEmoji.textContent = '🏆';
+        resultTitle.textContent = '¡Perfecto!';
+        resultMessage.textContent = '¡Respondiste todas las preguntas correctamente!';
+      } else if (gameState.correctAnswers >= 3) {
+        resultEmoji.textContent = '🎉';
+        resultTitle.textContent = '¡Muy bien!';
+        resultMessage.textContent = '¡Completaste el juego exitosamente!';
+      } else {
+        resultEmoji.textContent = '💪';
+        resultTitle.textContent = '¡Sigue practicando!';
+        resultMessage.textContent = 'Necesitas más respuestas correctas. ¡Tú puedes!';
+      }
+      
+      document.getElementById('final-score').textContent = gameState.points;
+      document.getElementById('correct-answers').textContent = gameState.correctAnswers;
+      
+      showScreen('results-screen');
+    }
+    
+    function restartGame() {
+      startGame(gameState.currentGame);
+    }
+    
+    function backToMenu() {
+      showScreen('main-menu');
+    }
+    
+    function showScreen(screenId) {
+      document.querySelectorAll('#main-menu, #game-screen, #results-screen').forEach(screen => {
+        screen.classList.add('hidden');
+      });
+      document.getElementById(screenId).classList.remove('hidden');
+    }
+    
+    // Inicializar Element SDK
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => {
+          const title = config.main_title || defaultConfig.main_title;
+          const welcome = config.welcome_message || defaultConfig.welcome_message;
+          
+          document.getElementById('main-title').textContent = title;
+          document.getElementById('welcome-msg').textContent = welcome;
+        },
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['main_title', config.main_title || defaultConfig.main_title],
+          ['welcome_message', config.welcome_message || defaultConfig.welcome_message]
+        ])
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d55cf1587ebf085',t:'MTc3MjM0MzQzNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
