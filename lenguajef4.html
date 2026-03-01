@@ -1,0 +1,1304 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juegos de Lenguaje - 3er Grado</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Nunito', sans-serif; }
+    .title-font { font-family: 'Fredoka', sans-serif; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 183, 77, 0.4); }
+      50% { box-shadow: 0 0 40px rgba(255, 183, 77, 0.8); }
+    }
+    
+    @keyframes celebrate {
+      0% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.1) rotate(-5deg); }
+      50% { transform: scale(1.2) rotate(5deg); }
+      75% { transform: scale(1.1) rotate(-5deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    
+    @keyframes confetti-fall {
+      0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    
+    .float-animation { animation: float 3s ease-in-out infinite; }
+    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+    .celebrate { animation: celebrate 0.6s ease-in-out; }
+    
+    .game-card {
+      transition: all 0.3s ease;
+      background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    }
+    
+    .game-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+    
+    .btn-game {
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-game:hover {
+      transform: scale(1.05);
+    }
+    
+    .btn-game:active {
+      transform: scale(0.95);
+    }
+    
+    .btn-game::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s;
+    }
+    
+    .btn-game:hover::after {
+      width: 200%;
+      height: 200%;
+    }
+    
+    .info-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 20px;
+    }
+    
+    .correct-answer {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+      animation: celebrate 0.6s ease-in-out;
+    }
+    
+    .wrong-answer {
+      background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%) !important;
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+    
+    .progress-bar {
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      background-size: 200% 100%;
+      animation: gradient-move 2s linear infinite;
+    }
+    
+    @keyframes gradient-move {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    
+    .star {
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      animation: confetti-fall 3s linear forwards;
+      z-index: 1000;
+    }
+    
+    .drag-over {
+      background-color: #fed7aa !important;
+      border-2 border-orange-500 !important;
+      box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+    }
+    
+    .step-item {
+      user-select: none;
+    }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full overflow-auto">
+  <div id="app" class="min-h-full" style="background: linear-gradient(180deg, #87ceeb 0%, #f0f9ff 100%);"><!-- Main Menu -->
+   <div id="main-menu" class="min-h-full p-4 md:p-8">
+    <div class="max-w-6xl mx-auto"><!-- Header -->
+     <div class="text-center mb-8">
+      <h1 id="main-title" class="title-font text-4xl md:text-6xl font-bold text-white mb-4 float-animation" style="text-shadow: 3px 3px 6px rgba(0,0,0,0.3);">🎮 Juegos de Lenguaje 🎮</h1>
+      <p class="text-xl md:text-2xl text-white/90 font-semibold">📚 Tercer Grado - Fase 4 📚</p>
+      <div class="mt-4 inline-block bg-white/20 backdrop-blur-sm rounded-full px-6 py-2">
+       <p class="text-white font-medium">Campo Formativo: Lenguajes</p>
+      </div>
+     </div><!-- Games Grid -->
+     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><!-- Game 1: Periodistas -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(1)">
+       <div class="text-5xl mb-4 text-center">
+        📰
+       </div>
+       <h3 class="title-font text-xl font-bold text-purple-700 mb-2 text-center">1. Pequeños Periodistas</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Narración de sucesos del pasado y presente</p>
+       <div class="bg-purple-100 rounded-xl p-3">
+        <p class="text-purple-800 text-xs font-medium">🎯 Elige la narración que mejor encaje con la noticia</p>
+       </div>
+      </div><!-- Game 2: Adivina Quién -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(2)">
+       <div class="text-5xl mb-4 text-center">
+        🔍
+       </div>
+       <h3 class="title-font text-xl font-bold text-pink-700 mb-2 text-center">2. ¡Adivina Quién!</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Descripción de personas, lugares y hechos</p>
+       <div class="bg-pink-100 rounded-xl p-3">
+        <p class="text-pink-800 text-xs font-medium">🎯 Adivina según las descripciones</p>
+       </div>
+      </div><!-- Game 3: Preguntados -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(3)">
+       <div class="text-5xl mb-4 text-center">
+        💬
+       </div>
+       <h3 class="title-font text-xl font-bold text-blue-700 mb-2 text-center">3. Preguntados del Diálogo</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Diálogo para toma de acuerdos</p>
+       <div class="bg-blue-100 rounded-xl p-3">
+        <p class="text-blue-800 text-xs font-medium">🎯 Responde sobre las normas del diálogo</p>
+       </div>
+      </div><!-- Game 4: Diccionario Mágico -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(4)">
+       <div class="text-5xl mb-4 text-center">
+        📖
+       </div>
+       <h3 class="title-font text-xl font-bold text-green-700 mb-2 text-center">4. Diccionario Mágico</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Comprensión de textos expositivos</p>
+       <div class="bg-green-100 rounded-xl p-3">
+        <p class="text-green-800 text-xs font-medium">🎯 Descubre el significado de palabras</p>
+       </div>
+      </div><!-- Game 5: Detectives -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(5)">
+       <div class="text-5xl mb-4 text-center">
+        🕵️
+       </div>
+       <h3 class="title-font text-xl font-bold text-amber-700 mb-2 text-center">5. Detectives de la Información</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Búsqueda y manejo de información</p>
+       <div class="bg-amber-100 rounded-xl p-3">
+        <p class="text-amber-800 text-xs font-medium">🎯 Encuentra la información correcta</p>
+       </div>
+      </div><!-- Game 6: Textos Discontinuos -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(6)">
+       <div class="text-5xl mb-4 text-center">
+        🦎
+       </div>
+       <h3 class="title-font text-xl font-bold text-teal-700 mb-2 text-center">6. Constructor de Esquemas</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Textos discontinuos</p>
+       <div class="bg-teal-100 rounded-xl p-3">
+        <p class="text-teal-800 text-xs font-medium">🎯 Arma textos sobre imágenes</p>
+       </div>
+      </div><!-- Game 7: Resúmenes -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(7)">
+       <div class="text-5xl mb-4 text-center">
+        ✍️
+       </div>
+       <h3 class="title-font text-xl font-bold text-indigo-700 mb-2 text-center">7. El Mejor Resumen</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Comprensión y producción de resúmenes</p>
+       <div class="bg-indigo-100 rounded-xl p-3">
+        <p class="text-indigo-800 text-xs font-medium">🎯 Elige el resumen más completo</p>
+       </div>
+      </div><!-- Game 8: Recetas -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(8)">
+       <div class="text-5xl mb-4 text-center">
+        👨‍🍳
+       </div>
+       <h3 class="title-font text-xl font-bold text-orange-700 mb-2 text-center">8. Chef Ordenado</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Textos instructivos</p>
+       <div class="bg-orange-100 rounded-xl p-3">
+        <p class="text-orange-800 text-xs font-medium">🎯 Ordena los pasos de las recetas</p>
+       </div>
+      </div><!-- Game 9: Exposiciones -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(9)">
+       <div class="text-5xl mb-4 text-center">
+        🎤
+       </div>
+       <h3 class="title-font text-xl font-bold text-rose-700 mb-2 text-center">9. Maestro Expositor</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Exposición sobre temas diversos</p>
+       <div class="bg-rose-100 rounded-xl p-3">
+        <p class="text-rose-800 text-xs font-medium">🎯 Aprende sobre exposiciones</p>
+       </div>
+      </div><!-- Game 10: Cartas -->
+      <div class="game-card rounded-3xl p-6 shadow-xl cursor-pointer" onclick="startGame(10)">
+       <div class="text-5xl mb-4 text-center">
+        ✉️
+       </div>
+       <h3 class="title-font text-xl font-bold text-cyan-700 mb-2 text-center">10. Cartero del Pueblo</h3>
+       <p class="text-gray-600 text-sm text-center mb-3">Comunicación a distancia</p>
+       <div class="bg-cyan-100 rounded-xl p-3">
+        <p class="text-cyan-800 text-xs font-medium">🎯 Identifica partes de las cartas</p>
+       </div>
+      </div>
+     </div><!-- Footer Credit -->
+     <div class="mt-10 text-center">
+      <div class="inline-block bg-white/30 backdrop-blur-sm rounded-2xl px-8 py-4">
+       <p class="text-white font-bold text-lg">💖 Material creado con amor por 💖</p>
+       <p id="teacher-credit" class="title-font text-white text-xl font-bold mt-1">Mtra. María Fernanda Flores Valenzuela</p>
+      </div>
+     </div>
+    </div>
+   </div><!-- Game Container (Hidden by default) -->
+   <div id="game-container" class="hidden min-h-full p-4 md:p-8">
+    <div class="max-w-4xl mx-auto"><!-- Game Header -->
+     <div class="flex items-center justify-between mb-6"><button onclick="backToMenu()" class="btn-game bg-white/90 hover:bg-white text-purple-700 font-bold py-3 px-6 rounded-full shadow-lg"> ← Volver al Menú </button>
+      <div id="game-score" class="bg-white/90 rounded-full px-6 py-3 shadow-lg"><span class="font-bold text-purple-700">⭐ Puntos: <span id="score-value">0</span></span>
+      </div>
+     </div><!-- Info Box (Content & PDA) -->
+     <div id="info-box" class="info-box">
+      <div class="flex items-start gap-4">
+       <div class="text-4xl" id="game-icon">
+        📰
+       </div>
+       <div class="flex-1">
+        <h2 id="game-title" class="title-font text-2xl font-bold mb-2">Nombre del Juego</h2>
+        <div class="bg-white/20 rounded-xl p-3 mb-2">
+         <p class="font-semibold text-sm">📚 CONTENIDO:</p>
+         <p id="game-content" class="text-sm">Contenido del aprendizaje</p>
+        </div>
+        <div class="bg-white/20 rounded-xl p-3">
+         <p class="font-semibold text-sm">🎯 PDA (Proceso de Desarrollo de Aprendizaje):</p>
+         <p id="game-pda" class="text-sm">Descripción del PDA</p>
+        </div>
+       </div>
+      </div>
+     </div><!-- Progress Bar -->
+     <div class="bg-white/30 rounded-full h-4 mb-6 overflow-hidden">
+      <div id="progress-bar" class="progress-bar h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+     </div><!-- Game Content Area -->
+     <div id="game-area" class="bg-white rounded-3xl shadow-2xl p-6 md:p-8"><!-- Dynamic game content goes here -->
+     </div><!-- Navigation Buttons -->
+     <div id="nav-buttons" class="flex justify-center gap-4 mt-6"><button id="next-btn" onclick="nextQuestion()" class="hidden btn-game bg-gradient-to-r from-green-400 to-emerald-500 text-white font-bold py-4 px-8 rounded-full shadow-lg text-lg"> Siguiente Pregunta → </button>
+     </div>
+    </div>
+   </div><!-- Results Screen -->
+   <div id="results-screen" class="hidden min-h-full p-4 md:p-8 flex items-center justify-center">
+    <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 text-center max-w-lg w-full">
+     <div id="results-stars" class="text-6xl mb-4">
+      ⭐⭐⭐
+     </div>
+     <h2 class="title-font text-3xl font-bold text-purple-700 mb-4">¡Felicidades!</h2>
+     <p class="text-xl text-gray-600 mb-2">Has completado el juego</p>
+     <p id="final-score" class="text-3xl font-bold text-purple-700 mb-6">Puntuación: 0/0</p>
+     <div id="results-message" class="bg-purple-100 rounded-xl p-4 mb-6">
+      <p class="text-purple-800 font-medium">Mensaje de resultados</p>
+     </div>
+     <div class="flex flex-col gap-3"><button onclick="restartGame()" class="btn-game bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 px-8 rounded-full shadow-lg"> 🔄 Jugar de Nuevo </button> <button onclick="backToMenu()" class="btn-game bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-4 px-8 rounded-full shadow-lg"> 🏠 Volver al Menú </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // ===== CONFIGURATION =====
+    const defaultConfig = {
+      main_title: '🎮 Juegos de Lenguaje 🎮',
+      teacher_credit: 'Mtra. María Fernanda Flores Valenzuela'
+    };
+    
+    let config = { ...defaultConfig };
+    
+    // ===== SDK INITIALIZATION =====
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (newConfig) => {
+          config = { ...defaultConfig, ...newConfig };
+          document.getElementById('main-title').textContent = config.main_title;
+          document.getElementById('teacher-credit').textContent = config.teacher_credit;
+        },
+        mapToCapabilities: (cfg) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (cfg) => new Map([
+          ['main_title', cfg.main_title || defaultConfig.main_title],
+          ['teacher_credit', cfg.teacher_credit || defaultConfig.teacher_credit]
+        ])
+      });
+    }
+    
+    // ===== GAME STATE =====
+    let currentGame = 0;
+    let currentQuestion = 0;
+    let score = 0;
+    let totalQuestions = 0;
+    let answered = false;
+    
+    // ===== GAME DATA =====
+    const gamesData = {
+      // GAME 1: Periodistas
+      1: {
+        icon: '📰',
+        title: 'Pequeños Periodistas',
+        content: 'Narración de sucesos del pasado y del presente',
+        pda: 'El alumno identifica y comprende la función y las características principales de la narración.',
+        questions: [
+          {
+            image: '🏫',
+            imageDesc: 'Imagen: Niños regresando a clases después de vacaciones',
+            scenario: 'Los estudiantes de la Escuela Primaria "Benito Juárez" regresaron a clases este lunes después de las vacaciones de verano.',
+            options: [
+              { text: 'Ayer los niños jugaron en el parque y comieron helado. Fue muy divertido estar con sus amigos.', correct: false },
+              { text: 'Miles de estudiantes regresaron a las aulas este lunes 26 de agosto. Los padres los acompañaron con entusiasmo y los maestros los recibieron con carteles de bienvenida.', correct: true },
+              { text: 'Me gustan las vacaciones porque puedo dormir tarde y ver televisión todo el día.', correct: false }
+            ]
+          },
+          {
+            image: '🌳',
+            imageDesc: 'Imagen: Vecinos plantando árboles en un parque',
+            scenario: 'Jornada de reforestación en el parque municipal.',
+            options: [
+              { text: 'El pasado sábado, más de 50 vecinos participaron en la jornada de reforestación del Parque Central. Plantaron 200 árboles de diferentes especies para mejorar el medio ambiente.', correct: true },
+              { text: 'Los árboles son verdes y tienen hojas. Algunos árboles dan frutas muy ricas.', correct: false },
+              { text: 'Mañana voy a ir al parque con mi mamá a jugar futbol.', correct: false }
+            ]
+          },
+          {
+            image: '🏆',
+            imageDesc: 'Imagen: Equipo de futbol infantil celebrando un triunfo',
+            scenario: 'El equipo de futbol de la escuela ganó el torneo regional.',
+            options: [
+              { text: 'El equipo de futbol de la Escuela "Vicente Guerrero" se coronó campeón del Torneo Regional Infantil el domingo pasado, tras vencer 3-1 al equipo visitante. Los jugadores celebraron con sus familias.', correct: true },
+              { text: 'El futbol es un deporte muy popular. Se juega con una pelota redonda y hay dos equipos.', correct: false },
+              { text: 'Yo quiero ser futbolista cuando sea grande porque me gusta mucho correr.', correct: false }
+            ]
+          }
+        ]
+      },
+      
+      // GAME 2: Adivina Quién
+      2: {
+        icon: '🔍',
+        title: '¡Adivina Quién!',
+        content: 'Descripción de personas, lugares, hechos y procesos',
+        pda: 'Comprende que hay formas detalladas para describir a las personas y los lugares, señalando características más allá de su apariencia.',
+        questions: [
+          {
+            description: 'Es un lugar muy grande con muchos libros ordenados en estantes. Las personas van ahí a leer, estudiar o pedir libros prestados. Hay que guardar silencio y hay mesas para sentarse.',
+            options: [
+              { text: '🏪 Tienda', correct: false },
+              { text: '📚 Biblioteca', correct: true },
+              { text: '🏥 Hospital', correct: false },
+              { text: '🎭 Teatro', correct: false }
+            ]
+          },
+          {
+            description: 'Esta persona usa un uniforme blanco, trabaja en un lugar donde hay enfermos. Utiliza un estetoscopio para escuchar el corazón y ayuda a las personas a sentirse mejor cuando están enfermas.',
+            options: [
+              { text: '👨‍🍳 Cocinero', correct: false },
+              { text: '👨‍🏫 Maestro', correct: false },
+              { text: '👨‍⚕️ Doctor/Doctora', correct: true },
+              { text: '👮 Policía', correct: false }
+            ]
+          },
+          {
+            description: 'Es un animal muy grande y pesado que vive en ríos y lagos de África. Tiene la piel gruesa de color gris, orejas pequeñas y pasa mucho tiempo en el agua para mantenerse fresco.',
+            options: [
+              { text: '🦁 León', correct: false },
+              { text: '🦛 Hipopótamo', correct: true },
+              { text: '🐘 Elefante', correct: false },
+              { text: '🦒 Jirafa', correct: false }
+            ]
+          },
+          {
+            description: 'Este lugar tiene arena, olas y agua salada. Las personas van a nadar, hacer castillos de arena y tomar el sol. Se pueden encontrar conchas y cangrejos.',
+            options: [
+              { text: '🏔️ Montaña', correct: false },
+              { text: '🌲 Bosque', correct: false },
+              { text: '🏖️ Playa', correct: true },
+              { text: '🏜️ Desierto', correct: false }
+            ]
+          }
+        ]
+      },
+      
+      // GAME 3: Preguntados del Diálogo
+      3: {
+        icon: '💬',
+        title: 'Preguntados del Diálogo',
+        content: 'Diálogo para la toma de acuerdos y el intercambio de puntos de vista',
+        pda: 'Reconoce y usa pautas que norman los intercambios orales, como respetar el turno para hablar y prestar atención.',
+        questions: [
+          {
+            question: '¿Qué debes hacer cuando alguien más está hablando en una conversación?',
+            options: [
+              { text: 'Interrumpir para dar mi opinión rápidamente', correct: false },
+              { text: 'Escuchar con atención y esperar mi turno', correct: true },
+              { text: 'Hablar al mismo tiempo que la otra persona', correct: false },
+              { text: 'Distraerme con otras cosas', correct: false }
+            ]
+          },
+          {
+            question: '¿Cuál es la mejor manera de expresar que no estás de acuerdo con alguien?',
+            options: [
+              { text: 'Gritar para que me escuchen', correct: false },
+              { text: 'Decir "Respeto tu opinión, pero yo pienso diferente porque..."', correct: true },
+              { text: 'Decir "Estás equivocado y no sabes nada"', correct: false },
+              { text: 'Dejar de hablar y enojarme', correct: false }
+            ]
+          },
+          {
+            question: '¿Por qué es importante tomar acuerdos cuando trabajamos en equipo?',
+            options: [
+              { text: 'Para que solo una persona decida todo', correct: false },
+              { text: 'No es importante, cada quien hace lo que quiere', correct: false },
+              { text: 'Para organizarnos mejor y que todos participen', correct: true },
+              { text: 'Para terminar más rápido sin importar la calidad', correct: false }
+            ]
+          },
+          {
+            question: '¿Qué significa "respetar el turno para hablar"?',
+            options: [
+              { text: 'Hablar solo cuando yo quiera', correct: false },
+              { text: 'Esperar a que la otra persona termine antes de hablar', correct: true },
+              { text: 'No hablar nunca', correct: false },
+              { text: 'Hablar más fuerte que los demás', correct: false }
+            ]
+          }
+        ]
+      },
+      
+      // GAME 4: Diccionario Mágico
+      4: {
+        icon: '📖',
+        title: 'Diccionario Mágico',
+        content: 'Comprensión y producción de textos expositivos',
+        pda: 'Recurre a diversos soportes que contienen textos expositivos para ampliar sus conocimientos y consulta diccionarios.',
+        questions: [
+          {
+            text: 'Las abejas son insectos muy importantes para el <strong>ecosistema</strong>. Ellas polinizan las flores, lo que permite que las plantas produzcan frutos y semillas.',
+            word: 'ecosistema',
+            question: 'Según el contexto, ¿qué significa "ecosistema"?',
+            options: [
+              { text: 'Un tipo de abeja muy grande', correct: false },
+              { text: 'El conjunto de seres vivos y el ambiente donde viven', correct: true },
+              { text: 'Una flor especial', correct: false },
+              { text: 'Un panal de abejas', correct: false }
+            ]
+          },
+          {
+            text: 'El agua puede estar en tres estados: sólido (hielo), líquido (agua que bebemos) y <strong>gaseoso</strong> (vapor). Cuando el agua hierve, se convierte en vapor.',
+            word: 'gaseoso',
+            question: 'Según el contexto, ¿qué significa "gaseoso"?',
+            options: [
+              { text: 'Agua muy fría', correct: false },
+              { text: 'Agua con gas para beber', correct: false },
+              { text: 'Estado del agua cuando se convierte en vapor', correct: true },
+              { text: 'Hielo derretido', correct: false }
+            ]
+          },
+          {
+            text: 'Los dinosaurios se <strong>extinguieron</strong> hace millones de años. Ya no existen dinosaurios vivos en nuestro planeta.',
+            word: 'extinguieron',
+            question: 'Según el contexto, ¿qué significa "extinguieron"?',
+            options: [
+              { text: 'Se escondieron', correct: false },
+              { text: 'Desaparecieron por completo, dejaron de existir', correct: true },
+              { text: 'Se hicieron más grandes', correct: false },
+              { text: 'Se fueron a otro lugar', correct: false }
+            ]
+          }
+        ]
+      },
+      
+      // GAME 5: Detectives
+      5: {
+        icon: '🕵️',
+        title: 'Detectives de la Información',
+        content: 'Búsqueda y manejo reflexivo de información',
+        pda: 'Formula preguntas para realizar la búsqueda de información y las responde localizándola en fuentes pertinentes.',
+        questions: [
+          {
+            case: '🔎 CASO DEL DETECTIVE',
+            scenario: 'Necesitas hacer una tarea sobre los volcanes de México. ¿Cuál sería la MEJOR pregunta para buscar información?',
+            options: [
+              { text: '¿Por qué el cielo es azul?', correct: false },
+              { text: '¿Cuáles son los volcanes más importantes de México y dónde se ubican?', correct: true },
+              { text: '¿Qué comieron los dinosaurios?', correct: false },
+              { text: '¿Cómo se hacen los pasteles?', correct: false }
+            ]
+          },
+          {
+            case: '🔎 CASO DEL DETECTIVE',
+            scenario: 'Quieres saber información confiable sobre los planetas del sistema solar. ¿Dónde sería MEJOR buscar?',
+            options: [
+              { text: 'En un libro de cuentos de hadas', correct: false },
+              { text: 'En una enciclopedia o libro de ciencias', correct: true },
+              { text: 'En una revista de chistes', correct: false },
+              { text: 'En un libro de recetas de cocina', correct: false }
+            ]
+          },
+          {
+            case: '🔎 CASO DEL DETECTIVE',
+            scenario: 'Encontraste dos textos sobre las ballenas. Uno es de una enciclopedia científica y otro es un cuento infantil. ¿Cuál es más confiable para tu tarea de ciencias?',
+            options: [
+              { text: 'El cuento infantil porque es más divertido', correct: false },
+              { text: 'La enciclopedia científica porque tiene información real y verificada', correct: true },
+              { text: 'Los dos son iguales de confiables', correct: false },
+              { text: 'Ninguno sirve para la tarea', correct: false }
+            ]
+          }
+        ]
+      },
+      
+      // GAME 6: Textos Discontinuos
+      6: {
+        icon: '🦎',
+        title: 'Constructor de Esquemas',
+        content: 'Comprensión y producción de textos discontinuos',
+        pda: 'Identifica características de esquemas de seres vivos y objetos, así como la programación de actividades.',
+        questions: [
+          {
+            image: '🐊',
+            animal: 'COCODRILO',
+            question: '¿Cuál sería el MEJOR título para un esquema sobre este animal?',
+            options: [
+              { text: 'Mi mascota favorita', correct: false },
+              { text: 'El cocodrilo: características y hábitat', correct: true },
+              { text: 'Animales del espacio', correct: false },
+              { text: 'Receta de galletas', correct: false }
+            ]
+          },
+          {
+            image: '🦋',
+            animal: 'MARIPOSA',
+            question: '¿Qué información sería importante incluir en un esquema sobre la mariposa?',
+            options: [
+              { text: 'Cómo hacer un pastel de chocolate', correct: false },
+              { text: 'Las fases de su ciclo de vida: huevo, oruga, crisálida, mariposa', correct: true },
+              { text: 'Los nombres de los planetas', correct: false },
+              { text: 'Cómo jugar futbol', correct: false }
+            ]
+          },
+          {
+            image: '🌻',
+            animal: 'GIRASOL',
+            question: '¿Qué parte de la planta NO debería faltar en un esquema del girasol?',
+            options: [
+              { text: 'Un dibujo de un carro', correct: false },
+              { text: 'Raíz, tallo, hojas, flor y semillas', correct: true },
+              { text: 'Una receta de ensalada', correct: false },
+              { text: 'Los meses del año', correct: false }
+            ]
+          }
+        ]
+      },
+      
+      // GAME 7: El Mejor Resumen
+      7: {
+        icon: '✍️',
+        title: 'El Mejor Resumen',
+        content: 'Comprensión y producción de resúmenes',
+        pda: 'Reflexiona sobre las funciones del resumen para exponer de forma clara y precisa las ideas más importantes de una fuente.',
+        questions: [
+          {
+            originalText: 'Los delfines son mamíferos marinos muy inteligentes. Viven en grupos llamados manadas y se comunican entre sí usando sonidos como clics y silbidos. Los delfines respiran aire, por eso suben a la superficie del agua. Comen peces y calamares. Son animales muy amigables con los humanos.',
+            question: '¿Cuál es el MEJOR resumen de este texto?',
+            options: [
+              { text: 'Los delfines comen peces.', correct: false },
+              { text: 'Los delfines son mamíferos marinos inteligentes que viven en grupos, se comunican con sonidos, respiran aire y son amigables con los humanos.', correct: true },
+              { text: 'Me gustan los delfines porque son bonitos y nadan muy rápido en el mar azul.', correct: false }
+            ]
+          },
+          {
+            originalText: 'México tiene muchas tradiciones importantes. El Día de Muertos se celebra el 1 y 2 de noviembre para recordar a los familiares que ya fallecieron. Las familias hacen altares con flores de cempasúchil, comida, fotografías y velas. Es una celebración llena de color y significado.',
+            question: '¿Cuál es el MEJOR resumen de este texto?',
+            options: [
+              { text: 'El Día de Muertos es una tradición mexicana que se celebra el 1 y 2 de noviembre, donde las familias hacen altares para recordar a sus seres queridos fallecidos.', correct: true },
+              { text: 'Las flores son amarillas.', correct: false },
+              { text: 'En noviembre hace frío y la gente no va a la escuela porque es día de fiesta.', correct: false }
+            ]
+          }
+        ]
+      },
+      
+      // GAME 8: Chef Ordenado (Recetas)
+      8: {
+        icon: '👨‍🍳',
+        title: 'Chef Ordenado',
+        content: 'Comprensión y producción de textos instructivos',
+        pda: 'Identifica la función de reglamentos, recetas e instrucciones de juegos, y usa verbos en infinitivo o imperativo.',
+        questions: [
+          {
+            recipe: '🥪 SÁNDWICH DE JAMÓN Y QUESO',
+            steps: [
+              { text: '4. Cortar el sándwich a la mitad y servir.', order: 4 },
+              { text: '2. Colocar una rebanada de jamón sobre el pan.', order: 2 },
+              { text: '1. Tomar dos rebanadas de pan.', order: 1 },
+              { text: '3. Agregar una rebanada de queso y tapar con el otro pan.', order: 3 }
+            ]
+          },
+          {
+            recipe: '🥣 CEREAL CON LECHE',
+            steps: [
+              { text: '3. Agregar fruta picada si lo deseas.', order: 3 },
+              { text: '1. Tomar un tazón limpio.', order: 1 },
+              { text: '4. Tomar una cuchara y disfrutar.', order: 4 },
+              { text: '2. Servir el cereal y agregar la leche.', order: 2 }
+            ]
+          },
+          {
+            recipe: '🍌 LICUADO DE PLÁTANO',
+            steps: [
+              { text: '2. Agregar un vaso de leche.', order: 2 },
+              { text: '4. Servir en un vaso y disfrutar.', order: 4 },
+              { text: '1. Pelar el plátano y cortarlo en trozos.', order: 1 },
+              { text: '3. Licuar hasta que quede suave.', order: 3 }
+            ]
+          }
+        ]
+      },
+      
+      // GAME 9: Maestro Expositor
+      9: {
+        icon: '🎤',
+        title: 'Maestro Expositor',
+        content: 'Exposición sobre temas diversos',
+        pda: 'Reconoce recursos expresivos y paralingüísticos, planea su exposición y elabora materiales de apoyo.',
+        questions: [
+          {
+            question: '¿Qué es un recurso paralingüístico que puedes usar al exponer?',
+            options: [
+              { text: 'Leer todo el texto sin mirar al público', correct: false },
+              { text: 'Usar gestos, cambiar el tono de voz y hacer pausas', correct: true },
+              { text: 'Hablar muy bajito para que no te escuchen', correct: false },
+              { text: 'Dar la espalda al público', correct: false }
+            ]
+          },
+          {
+            question: '¿Qué material de apoyo es más útil para una exposición sobre los animales del mar?',
+            options: [
+              { text: 'Un cartel con imágenes de animales marinos y datos importantes', correct: true },
+              { text: 'Una hoja en blanco', correct: false },
+              { text: 'Un libro cerrado', correct: false },
+              { text: 'Una pelota de futbol', correct: false }
+            ]
+          },
+          {
+            question: '¿Cuál es el primer paso para planear una buena exposición?',
+            options: [
+              { text: 'Empezar a hablar sin prepararse', correct: false },
+              { text: 'Investigar sobre el tema y organizar la información', correct: true },
+              { text: 'Hacer un dibujo sin relación con el tema', correct: false },
+              { text: 'Memorizar palabras difíciles sin entenderlas', correct: false }
+            ]
+          },
+          {
+            question: '¿Por qué es importante mirar al público cuando expones?',
+            options: [
+              { text: 'No es importante, mejor miro al piso', correct: false },
+              { text: 'Para conectar con las personas y mantener su atención', correct: true },
+              { text: 'Para que el público se sienta incómodo', correct: false },
+              { text: 'Porque el maestro me obliga', correct: false }
+            ]
+          }
+        ]
+      },
+      
+      // GAME 10: Cartero del Pueblo
+      10: {
+        icon: '✉️',
+        title: 'Cartero del Pueblo',
+        content: 'Comunicación a distancia con personas y propósitos diversos',
+        pda: 'Lee y comenta cartas reales o literarias, e identifica las funciones de los textos epistolares.',
+        questions: [
+          {
+            letter: `
+              <div class="bg-amber-50 p-4 rounded-xl border-2 border-amber-200 font-serif">
+                <p class="text-right text-gray-600">Guadalajara, 15 de marzo de 2024</p>
+                <br>
+                <p><strong>Querida abuelita Rosa:</strong></p>
+                <br>
+                <p>Te escribo para contarte que la próxima semana tenemos vacaciones de Semana Santa. ¿Podríamos ir a visitarte? Extraño mucho tus tamales y jugar en tu jardín.</p>
+                <br>
+                <p>Te quiere mucho,</p>
+                <p><strong>Tu nieta Sofía</strong></p>
+              </div>
+            `,
+            question: '¿Quién es el REMITENTE (quien envía la carta)?',
+            options: [
+              { text: 'La abuelita Rosa', correct: false },
+              { text: 'Sofía', correct: true },
+              { text: 'Un cartero', correct: false },
+              { text: 'Guadalajara', correct: false }
+            ]
+          },
+          {
+            letter: `
+              <div class="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 font-serif">
+                <p class="text-right text-gray-600">Ciudad de México, 20 de abril de 2024</p>
+                <br>
+                <p><strong>Estimado Sr. Director:</strong></p>
+                <br>
+                <p>Por medio de la presente, solicito permiso para que mi hijo Carlos Ramírez del grupo 3°A pueda salir temprano el día viernes 25 de abril por cita médica.</p>
+                <br>
+                <p>Agradezco su atención.</p>
+                <p><strong>Atentamente, María Ramírez</strong></p>
+              </div>
+            `,
+            question: '¿Quién es el DESTINATARIO (quien recibe la carta)?',
+            options: [
+              { text: 'María Ramírez', correct: false },
+              { text: 'Carlos Ramírez', correct: false },
+              { text: 'El Sr. Director', correct: true },
+              { text: 'El doctor', correct: false }
+            ]
+          },
+          {
+            letter: `
+              <div class="bg-green-50 p-4 rounded-xl border-2 border-green-200 font-serif">
+                <p class="text-right text-gray-600">Monterrey, 10 de mayo de 2024</p>
+                <br>
+                <p><strong>Querido amigo Pedro:</strong></p>
+                <br>
+                <p>¡Feliz cumpleaños! Espero que la pases muy bien con tu familia. Te mando un abrazo grande y espero verte pronto en las vacaciones.</p>
+                <br>
+                <p>Tu amigo,</p>
+                <p><strong>Luis</strong></p>
+              </div>
+            `,
+            question: '¿Cuál es el PROPÓSITO de esta carta?',
+            options: [
+              { text: 'Pedir permiso para faltar a clases', correct: false },
+              { text: 'Felicitar a Pedro por su cumpleaños', correct: true },
+              { text: 'Quejarse de algo', correct: false },
+              { text: 'Invitar a una fiesta', correct: false }
+            ]
+          },
+          {
+            letter: `
+              <div class="bg-purple-50 p-4 rounded-xl border-2 border-purple-200 font-serif">
+                <p class="text-right text-gray-600">Puebla, 5 de junio de 2024</p>
+                <br>
+                <p><strong>Queridos Reyes Magos:</strong></p>
+                <br>
+                <p>Este año me porté muy bien. Ayudé a mi mamá y saqué buenas calificaciones. Me gustaría pedirles una bicicleta roja para poder ir al parque con mis amigos.</p>
+                <br>
+                <p>Con cariño,</p>
+                <p><strong>Daniela</strong></p>
+              </div>
+            `,
+            question: '¿Qué FECHA tiene esta carta?',
+            options: [
+              { text: '5 de junio de 2024', correct: true },
+              { text: '6 de enero de 2024', correct: false },
+              { text: '25 de diciembre de 2024', correct: false },
+              { text: 'No tiene fecha', correct: false }
+            ]
+          }
+        ]
+      }
+    };
+    
+    // ===== GAME FUNCTIONS =====
+    function startGame(gameNumber) {
+      currentGame = gameNumber;
+      currentQuestion = 0;
+      score = 0;
+      answered = false;
+      
+      const game = gamesData[gameNumber];
+      totalQuestions = game.questions.length;
+      
+      document.getElementById('main-menu').classList.add('hidden');
+      document.getElementById('game-container').classList.remove('hidden');
+      document.getElementById('results-screen').classList.add('hidden');
+      
+      document.getElementById('game-icon').textContent = game.icon;
+      document.getElementById('game-title').textContent = game.title;
+      document.getElementById('game-content').textContent = game.content;
+      document.getElementById('game-pda').textContent = game.pda;
+      document.getElementById('score-value').textContent = '0';
+      
+      updateProgress();
+      renderQuestion();
+    }
+    
+    function renderQuestion() {
+      const game = gamesData[currentGame];
+      const question = game.questions[currentQuestion];
+      const gameArea = document.getElementById('game-area');
+      answered = false;
+      document.getElementById('next-btn').classList.add('hidden');
+      
+      let html = '';
+      
+      switch(currentGame) {
+        case 1: // Periodistas
+          html = renderPeriodistasQuestion(question);
+          break;
+        case 2: // Adivina Quién
+          html = renderAdivinaQuienQuestion(question);
+          break;
+        case 3: // Preguntados
+          html = renderPreguntadosQuestion(question);
+          break;
+        case 4: // Diccionario
+          html = renderDiccionarioQuestion(question);
+          break;
+        case 5: // Detectives
+          html = renderDetectivesQuestion(question);
+          break;
+        case 6: // Textos Discontinuos
+          html = renderTextosDiscontinuosQuestion(question);
+          break;
+        case 7: // Resúmenes
+          html = renderResumenesQuestion(question);
+          break;
+        case 8: // Recetas
+          html = renderRecetasQuestion(question);
+          break;
+        case 9: // Exposiciones
+          html = renderExposicionesQuestion(question);
+          break;
+        case 10: // Cartas
+          html = renderCartasQuestion(question);
+          break;
+      }
+      
+      gameArea.innerHTML = html;
+    }
+    
+    // Game 1: Periodistas
+    function renderPeriodistasQuestion(q) {
+      return `
+        <div class="text-center mb-6">
+          <div class="text-8xl mb-4">${q.image}</div>
+          <p class="text-gray-500 italic mb-4">${q.imageDesc}</p>
+          <div class="bg-yellow-100 rounded-xl p-4 mb-6">
+            <p class="font-bold text-yellow-800">📰 Noticia:</p>
+            <p class="text-yellow-900">${q.scenario}</p>
+          </div>
+          <p class="font-bold text-lg text-purple-700 mb-4">¿Cuál narración es la mejor para esta noticia?</p>
+        </div>
+        <div class="space-y-3">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkAnswer(${i}, ${opt.correct})" class="btn-option w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-purple-400 hover:bg-purple-50 transition-all">
+              <span class="font-medium">${opt.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // Game 2: Adivina Quién
+    function renderAdivinaQuienQuestion(q) {
+      return `
+        <div class="text-center mb-6">
+          <div class="bg-gradient-to-r from-pink-100 to-purple-100 rounded-2xl p-6 mb-6">
+            <p class="text-6xl mb-4">🤔</p>
+            <p class="font-bold text-lg text-purple-700 mb-2">DESCRIPCIÓN:</p>
+            <p class="text-gray-700 text-lg">${q.description}</p>
+          </div>
+          <p class="font-bold text-xl text-pink-700">¿Qué o quién es?</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkAnswer(${i}, ${opt.correct})" class="btn-option p-6 rounded-xl border-2 border-gray-200 hover:border-pink-400 hover:bg-pink-50 transition-all text-center">
+              <span class="text-3xl block mb-2">${opt.text.split(' ')[0]}</span>
+              <span class="font-medium">${opt.text.split(' ').slice(1).join(' ')}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // Game 3: Preguntados
+    function renderPreguntadosQuestion(q) {
+      return `
+        <div class="text-center mb-6">
+          <div class="text-6xl mb-4">💬</div>
+          <div class="bg-blue-100 rounded-2xl p-6 mb-6">
+            <p class="font-bold text-xl text-blue-800">${q.question}</p>
+          </div>
+        </div>
+        <div class="space-y-3">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkAnswer(${i}, ${opt.correct})" class="btn-option w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 transition-all">
+              <span class="font-medium">${opt.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // Game 4: Diccionario
+    function renderDiccionarioQuestion(q) {
+      return `
+        <div class="mb-6">
+          <div class="text-center text-6xl mb-4">📖</div>
+          <div class="bg-green-50 rounded-2xl p-6 mb-6 border-2 border-green-200">
+            <p class="font-bold text-green-800 mb-2">📄 TEXTO:</p>
+            <p class="text-gray-700 text-lg leading-relaxed">${q.text}</p>
+          </div>
+          <div class="bg-yellow-100 rounded-xl p-4 mb-4">
+            <p class="font-bold text-yellow-800">🔍 Palabra a investigar: <span class="text-2xl">${q.word}</span></p>
+          </div>
+          <p class="font-bold text-lg text-green-700 text-center">${q.question}</p>
+        </div>
+        <div class="space-y-3">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkAnswer(${i}, ${opt.correct})" class="btn-option w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-green-400 hover:bg-green-50 transition-all">
+              <span class="font-medium">${opt.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // Game 5: Detectives
+    function renderDetectivesQuestion(q) {
+      return `
+        <div class="text-center mb-6">
+          <div class="text-6xl mb-4">🕵️</div>
+          <div class="bg-amber-100 rounded-2xl p-6 mb-6 border-2 border-amber-300">
+            <p class="font-bold text-amber-800 text-xl mb-2">${q.case}</p>
+            <p class="text-amber-900 text-lg">${q.scenario}</p>
+          </div>
+        </div>
+        <div class="space-y-3">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkAnswer(${i}, ${opt.correct})" class="btn-option w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-amber-400 hover:bg-amber-50 transition-all">
+              <span class="font-medium">${opt.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // Game 6: Textos Discontinuos
+    function renderTextosDiscontinuosQuestion(q) {
+      return `
+        <div class="text-center mb-6">
+          <div class="text-8xl mb-4">${q.image}</div>
+          <div class="bg-teal-100 rounded-xl p-4 mb-6">
+            <p class="font-bold text-teal-800 text-2xl">${q.animal}</p>
+          </div>
+          <p class="font-bold text-lg text-teal-700">${q.question}</p>
+        </div>
+        <div class="space-y-3">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkAnswer(${i}, ${opt.correct})" class="btn-option w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-teal-400 hover:bg-teal-50 transition-all">
+              <span class="font-medium">${opt.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // Game 7: Resúmenes
+    function renderResumenesQuestion(q) {
+      return `
+        <div class="mb-6">
+          <div class="text-center text-6xl mb-4">✍️</div>
+          <div class="bg-indigo-50 rounded-2xl p-6 mb-6 border-2 border-indigo-200">
+            <p class="font-bold text-indigo-800 mb-2">📄 TEXTO ORIGINAL:</p>
+            <p class="text-gray-700 leading-relaxed">${q.originalText}</p>
+          </div>
+          <p class="font-bold text-lg text-indigo-700 text-center">${q.question}</p>
+        </div>
+        <div class="space-y-3">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkAnswer(${i}, ${opt.correct})" class="btn-option w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition-all">
+              <span class="font-medium">${opt.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // Game 8: Recetas (Ordenar)
+    function renderRecetasQuestion(q) {
+      const shuffledSteps = [...q.steps].sort(() => Math.random() - 0.5);
+      
+      setTimeout(() => {
+        const items = document.querySelectorAll('.step-item');
+        items.forEach(item => {
+          item.addEventListener('dragstart', dragStart);
+          item.addEventListener('dragend', dragEnd);
+          item.addEventListener('dragover', dragOver);
+          item.addEventListener('drop', drop);
+          item.addEventListener('dragenter', dragEnter);
+          item.addEventListener('dragleave', dragLeave);
+        });
+      }, 0);
+      
+      return `
+        <div class="text-center mb-6">
+          <div class="text-6xl mb-4">👨‍🍳</div>
+          <div class="bg-orange-100 rounded-xl p-4 mb-6">
+            <p class="font-bold text-orange-800 text-xl">${q.recipe}</p>
+          </div>
+          <p class="font-bold text-lg text-orange-700 mb-4">Arrastra y ordena los pasos correctamente:</p>
+        </div>
+        <div id="steps-container" class="space-y-3">
+          ${shuffledSteps.map((step, i) => `
+            <div class="step-item bg-white p-4 rounded-xl border-2 border-orange-200 cursor-move flex items-center gap-3 transition-all" 
+                 draggable="true" 
+                 data-order="${step.order}">
+              <span class="bg-orange-500 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold step-number flex-shrink-0">${i + 1}</span>
+              <span class="flex-1">${step.text}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="text-center mt-6">
+          <button onclick="checkRecipeOrder()" class="btn-game bg-gradient-to-r from-orange-400 to-red-500 text-white font-bold py-3 px-8 rounded-full shadow-lg">
+            ✅ Verificar Orden
+          </button>
+        </div>
+      `;
+    }
+    
+    // Drag and drop functions for recipes
+    let draggedItem = null;
+    
+    function dragStart(e) {
+      draggedItem = this;
+      this.style.opacity = '0.5';
+      e.dataTransfer.effectAllowed = 'move';
+    }
+    
+    function dragEnd(e) {
+      draggedItem = null;
+      this.style.opacity = '1';
+      document.querySelectorAll('.step-item').forEach(item => {
+        item.classList.remove('drag-over');
+      });
+    }
+    
+    function dragEnter(e) {
+      if (this !== draggedItem) {
+        this.classList.add('drag-over');
+        this.style.opacity = '0.7';
+      }
+    }
+    
+    function dragLeave(e) {
+      this.classList.remove('drag-over');
+      this.style.opacity = '1';
+    }
+    
+    function dragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    }
+    
+    function drop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (this !== draggedItem && draggedItem) {
+        const container = document.getElementById('steps-container');
+        const items = [...container.querySelectorAll('.step-item')];
+        const draggedIndex = items.indexOf(draggedItem);
+        const targetIndex = items.indexOf(this);
+        
+        if (draggedIndex < targetIndex) {
+          this.parentNode.insertBefore(draggedItem, this.nextSibling);
+        } else {
+          this.parentNode.insertBefore(draggedItem, this);
+        }
+        updateStepNumbers();
+      }
+      this.classList.remove('drag-over');
+      this.style.opacity = '1';
+    }
+    
+    function updateStepNumbers() {
+      const items = document.querySelectorAll('.step-item');
+      items.forEach((item, index) => {
+        item.querySelector('.step-number').textContent = index + 1;
+      });
+    }
+    
+    function checkRecipeOrder() {
+      if (answered) return;
+      answered = true;
+      
+      const items = document.querySelectorAll('.step-item');
+      let isCorrect = true;
+      
+      items.forEach((item, index) => {
+        const correctOrder = parseInt(item.dataset.order);
+        if (correctOrder !== index + 1) {
+          isCorrect = false;
+          item.classList.add('wrong-answer');
+        } else {
+          item.classList.add('correct-answer');
+        }
+      });
+      
+      if (isCorrect) {
+        score++;
+        document.getElementById('score-value').textContent = score;
+        createConfetti();
+      }
+      
+      document.getElementById('next-btn').classList.remove('hidden');
+    }
+    
+    // Game 9: Exposiciones
+    function renderExposicionesQuestion(q) {
+      return `
+        <div class="text-center mb-6">
+          <div class="text-6xl mb-4">🎤</div>
+          <div class="bg-rose-100 rounded-2xl p-6 mb-6">
+            <p class="font-bold text-xl text-rose-800">${q.question}</p>
+          </div>
+        </div>
+        <div class="space-y-3">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkAnswer(${i}, ${opt.correct})" class="btn-option w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-rose-400 hover:bg-rose-50 transition-all">
+              <span class="font-medium">${opt.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // Game 10: Cartas
+    function renderCartasQuestion(q) {
+      return `
+        <div class="mb-6">
+          <div class="text-center text-6xl mb-4">✉️</div>
+          <div class="mb-6">
+            ${q.letter}
+          </div>
+          <p class="font-bold text-lg text-cyan-700 text-center">${q.question}</p>
+        </div>
+        <div class="space-y-3">
+          ${q.options.map((opt, i) => `
+            <button onclick="checkAnswer(${i}, ${opt.correct})" class="btn-option w-full text-left p-4 rounded-xl border-2 border-gray-200 hover:border-cyan-400 hover:bg-cyan-50 transition-all">
+              <span class="font-medium">${opt.text}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+    
+    // ===== ANSWER CHECKING =====
+    function checkAnswer(index, isCorrect) {
+      if (answered) return;
+      answered = true;
+      
+      const buttons = document.querySelectorAll('.btn-option');
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        const btnCorrect = gamesData[currentGame].questions[currentQuestion].options[i].correct;
+        if (btnCorrect) {
+          btn.classList.add('correct-answer');
+        } else if (i === index && !isCorrect) {
+          btn.classList.add('wrong-answer');
+        }
+      });
+      
+      if (isCorrect) {
+        score++;
+        document.getElementById('score-value').textContent = score;
+        createConfetti();
+      }
+      
+      document.getElementById('next-btn').classList.remove('hidden');
+    }
+    
+    function nextQuestion() {
+      currentQuestion++;
+      updateProgress();
+      
+      if (currentQuestion >= totalQuestions) {
+        showResults();
+      } else {
+        renderQuestion();
+      }
+    }
+    
+    function updateProgress() {
+      const progress = ((currentQuestion) / totalQuestions) * 100;
+      document.getElementById('progress-bar').style.width = `${progress}%`;
+    }
+    
+    // ===== RESULTS =====
+    function showResults() {
+      document.getElementById('game-container').classList.add('hidden');
+      document.getElementById('results-screen').classList.remove('hidden');
+      
+      const percentage = (score / totalQuestions) * 100;
+      document.getElementById('final-score').textContent = `Puntuación: ${score}/${totalQuestions}`;
+      
+      let stars = '';
+      let message = '';
+      
+      if (percentage >= 90) {
+        stars = '⭐⭐⭐';
+        message = '¡EXCELENTE! Eres un verdadero experto en Lenguaje. ¡Sigue así!';
+      } else if (percentage >= 70) {
+        stars = '⭐⭐';
+        message = '¡MUY BIEN! Has demostrado buenos conocimientos. ¡Puedes mejorar aún más!';
+      } else if (percentage >= 50) {
+        stars = '⭐';
+        message = '¡BUEN ESFUERZO! Sigue practicando para mejorar tus habilidades.';
+      } else {
+        stars = '💪';
+        message = '¡No te rindas! Practica más y lo lograrás. ¡Tú puedes!';
+      }
+      
+      document.getElementById('results-stars').textContent = stars;
+      document.getElementById('results-message').innerHTML = `<p class="text-purple-800 font-medium">${message}</p>`;
+      
+      createConfetti();
+    }
+    
+    function restartGame() {
+      startGame(currentGame);
+    }
+    
+    function backToMenu() {
+      document.getElementById('main-menu').classList.remove('hidden');
+      document.getElementById('game-container').classList.add('hidden');
+      document.getElementById('results-screen').classList.add('hidden');
+    }
+    
+    // ===== CONFETTI EFFECT =====
+    function createConfetti() {
+      const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#a29bfe', '#fd79a8'];
+      
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d55ebe9033d3034',t:'MTc3MjM0NDYxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
